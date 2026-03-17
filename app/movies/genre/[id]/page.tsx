@@ -2,7 +2,7 @@
  * Movies by genre - SSR fetches by genre id.
  */
 import { notFound } from "next/navigation";
-import { fetchDiscoverMovies, fetchGenres } from "@/lib/tmdb";
+import { fetchDiscoverMovies, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { GenrePage } from "@/components/pages/GenrePage";
 
 interface GenreRouteProps {
@@ -21,13 +21,15 @@ export async function generateMetadata({ params }: GenreRouteProps) {
 export default async function GenreRoute({ params }: GenreRouteProps) {
   const { id } = await params;
   const genreId = Number(id);
-  const [movies, genres] = await Promise.all([
+  const [moviesRaw, genres] = await Promise.all([
     fetchDiscoverMovies({ genre_id: genreId }),
     fetchGenres(),
   ]);
 
   const genre = genres.find((g) => g.id === genreId);
   if (!genre) notFound();
+
+  const movies = await enrichMoviesWithRuntime(moviesRaw);
 
   return <GenrePage movies={movies} genreName={genre.name} />;
 }

@@ -5,12 +5,17 @@
  * Receives movie, credits, videos, similar from SSR parent.
  */
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type {
   MovieDetail,
   MovieCredits,
   Video,
   Movie,
+  WatchProvidersResponse,
+  WatchProvidersByCountry,
+  Review,
+  Collection,
 } from "@/types/movie";
 import { Badge } from "@/components/ui/Badge";
 import { CastCard } from "@/components/ui/CastCard";
@@ -30,11 +35,88 @@ function formatCurrency(value: number | undefined): string {
   }).format(value);
 }
 
+const IMAGE_BASE_PROVIDER = "https://image.tmdb.org/t/p/original";
+
+function WatchProvidersSection({
+  providers,
+}: {
+  providers: WatchProvidersByCountry;
+}) {
+  const hasAny =
+    (providers.flatrate?.length ?? 0) > 0 ||
+    (providers.rent?.length ?? 0) > 0 ||
+    (providers.buy?.length ?? 0) > 0;
+  if (!hasAny) return null;
+
+  const ProviderList = ({
+    items,
+    label,
+  }: {
+    items: { logo_path: string | null; provider_name: string; provider_id?: number }[];
+    label: string;
+  }) =>
+    items.length > 0 ? (
+      <div className="mb-2">
+        <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+          {label}:{" "}
+        </span>
+        <span className="flex flex-wrap gap-2 mt-1">
+          {items.map((p) => (
+            <span
+              key={p.provider_id ?? p.provider_name}
+              className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-300"
+            >
+              {p.logo_path ? (
+                <Image
+                  src={`${IMAGE_BASE_PROVIDER}${p.logo_path}`}
+                  alt={p.provider_name}
+                  width={24}
+                  height={24}
+                  className="rounded object-contain"
+                />
+              ) : null}
+              {p.provider_name}
+            </span>
+          ))}
+        </span>
+      </div>
+    ) : null;
+
+  return (
+    <div className="my-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+      <p className="font-bold text-gray-700 dark:text-gray-300 mb-2">
+        Where to Watch
+      </p>
+      <ProviderList
+        items={providers.flatrate ?? []}
+        label="Stream"
+      />
+      <ProviderList items={providers.rent ?? []} label="Rent" />
+      <ProviderList items={providers.buy ?? []} label="Buy" />
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+        Data from{" "}
+        <a
+          href="https://www.justwatch.com"
+          target="_blank"
+          rel="noreferrer"
+          className="hover:underline"
+        >
+          JustWatch
+        </a>
+      </p>
+    </div>
+  );
+}
+
 interface MovieDetailPageProps {
   movie: MovieDetail;
   credits: MovieCredits | null;
   videos: Video[];
   similarMovies: Movie[];
+  recommendations: Movie[];
+  watchProviders: WatchProvidersResponse | null;
+  reviews: Review[];
+  collection: Collection | null;
 }
 
 export function MovieDetailPage({
@@ -42,6 +124,10 @@ export function MovieDetailPage({
   credits,
   videos,
   similarMovies,
+  recommendations,
+  watchProviders,
+  reviews,
+  collection,
 }: MovieDetailPageProps) {
   useTitle(movie.title);
   const image = movie.poster_path
@@ -88,13 +174,13 @@ export function MovieDetailPage({
             {movie.overview}
           </p>
           {movie.genres && movie.genres.length > 0 && (
-            <p className="my-7 flex flex-wrap gap-2">
+            <div className="my-7 flex flex-wrap gap-2">
               {movie.genres.map((genre) => (
                 <Badge key={genre.id} variant="outline" className="p-2">
                   {genre.name}
                 </Badge>
               ))}
-            </p>
+            </div>
           )}
           <div className="flex items-center gap-2">
             <svg
@@ -137,7 +223,17 @@ export function MovieDetailPage({
             <p className="my-2">
               <span className="font-bold text-gray-700 dark:text-gray-300">Director(s):</span>{" "}
               <span className="text-gray-600 dark:text-gray-400">
-                {directors.map((d) => d.name).join(", ")}
+                {directors.map((d, i) => (
+                  <span key={d.id}>
+                    {i > 0 && ", "}
+                    <Link
+                      href={`/person/${d.id}`}
+                      className="text-blue-600 hover:underline dark:text-blue-400"
+                    >
+                      {d.name}
+                    </Link>
+                  </span>
+                ))}
               </span>
             </p>
           )}
@@ -172,8 +268,54 @@ export function MovieDetailPage({
               <span className="text-gray-600 dark:text-gray-400">N/A</span>
             )}
           </p>
+          {watchProviders?.results?.US && (
+            <WatchProvidersSection providers={watchProviders.results.US} />
+          )}
+          {movie.belongs_to_collection && (
+            <p className="my-4">
+              <span className="font-bold text-gray-700 dark:text-gray-300">
+                Collection:
+              </span>{" "}
+              <Link
+                href={`/collection/${movie.belongs_to_collection.id}`}
+                className="text-blue-600 hover:underline dark:text-blue-400"
+              >
+                {movie.belongs_to_collection.name}
+              </Link>
+            </p>
+          )}
         </motion.div>
       </div>
+
+      {collection && collection.parts.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.18 }}
+          className="mt-12"
+        >
+          <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
+            {collection.name} Collection
+          </h2>
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {collection.parts.map((part, i) => (
+              <SimilarMovieCard
+                key={part.id}
+                movie={{
+                  id: part.id,
+                  original_title: part.title ?? part.original_title ?? "",
+                  overview: part.overview ?? "",
+                  poster_path: part.poster_path,
+                  backdrop_path: part.backdrop_path,
+                  vote_average: part.vote_average,
+                  release_date: part.release_date,
+                }}
+                index={i}
+              />
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {videos.length > 0 && (
         <motion.div
@@ -224,6 +366,62 @@ export function MovieDetailPage({
           <div className="flex gap-4 overflow-x-auto pb-2">
             {similarMovies.slice(0, 12).map((m, i) => (
               <SimilarMovieCard key={m.id} movie={m} index={i} />
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {recommendations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.35 }}
+          className="mt-12"
+        >
+          <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
+            Recommendations
+          </h2>
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {recommendations.slice(0, 12).map((m, i) => (
+              <SimilarMovieCard key={m.id} movie={m} index={i} />
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {reviews.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
+          className="mt-12"
+        >
+          <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
+            Reviews
+          </h2>
+          <div className="space-y-4">
+            {reviews.slice(0, 5).map((review) => (
+              <div
+                key={review.id}
+                className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    {review.author}
+                  </span>
+                  {review.author_details?.rating != null && (
+                    <span className="text-sm text-yellow-600 dark:text-yellow-400">
+                      ★ {review.author_details.rating}/10
+                    </span>
+                  )}
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {new Date(review.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-4">
+                  {review.content}
+                </p>
+              </div>
             ))}
           </div>
         </motion.div>

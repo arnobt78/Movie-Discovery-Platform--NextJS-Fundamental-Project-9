@@ -1,7 +1,7 @@
 /**
  * Top rated movies - SSR fetches top_rated, passes to MovieListPage.
  */
-import { fetchMovies } from "@/lib/tmdb";
+import { fetchMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { MovieListPage } from "@/components/pages/MovieListPage";
 
 export const metadata = {
@@ -9,6 +9,8 @@ export const metadata = {
 };
 
 export default async function TopRatedPage() {
-  const movies = await fetchMovies("movie/top_rated");
+  const movies = await enrichMoviesWithRuntime(
+    await fetchMovies("movie/top_rated")
+  );
   return <MovieListPage movies={movies} title="Top Rated" />;
 }

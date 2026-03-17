@@ -18,12 +18,25 @@ interface DiscoverPageProps {
   genres: Genre[];
 }
 
+const DEFAULT_SORT = "popularity.desc";
+
 export function DiscoverPage({ initialMovies, genres }: DiscoverPageProps) {
   const router = useRouter();
   const { genreId, year, sort } = useDiscoverParams();
 
+  const hasActiveFilters =
+    genreId !== null || year !== null || sort !== DEFAULT_SORT;
+
+  const clearFilters = useCallback(() => {
+    router.push("/movies/discover");
+  }, [router]);
+
   const updateParams = useCallback(
-    (updates: { genre?: number | null; year?: number | null; sort?: string }) => {
+    (updates: {
+      genre?: number | null;
+      year?: number | null;
+      sort?: string;
+    }) => {
       const newGenre = updates.genre !== undefined ? updates.genre : genreId;
       const newYear = updates.year !== undefined ? updates.year : year;
       const newSort = updates.sort ?? sort;
@@ -34,11 +47,11 @@ export function DiscoverPage({ initialMovies, genres }: DiscoverPageProps) {
       const q = p.toString();
       router.push(q ? `/movies/discover?${q}` : "/movies/discover");
     },
-    [genreId, year, sort, router]
+    [genreId, year, sort, router],
   );
 
   return (
-    <section className="max-w-7xl mx-auto py-7">
+    <section className="max-w-9xl mx-auto py-7">
       <motion.h1
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -61,24 +74,35 @@ export function DiscoverPage({ initialMovies, genres }: DiscoverPageProps) {
           selected={year}
           onSelect={(y) => updateParams({ year: y })}
         />
-        <SortSelect
-          value={sort}
-          onChange={(v) => updateParams({ sort: v })}
-        />
+        <div className="flex items-center gap-2">
+          <SortSelect
+            value={sort}
+            onChange={(v) => updateParams({ sort: v })}
+          />
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
+            >
+              Clear Filter
+            </button>
+          )}
+        </div>
       </motion.div>
       <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: { transition: { staggerChildren: 0.05 } },
-            hidden: {},
-          }}
-          className="flex justify-start flex-wrap other:justify-evenly gap-4"
-        >
-          {initialMovies.map((movie, index) => (
-            <MovieCard key={movie.id} movie={movie} index={index} />
-          ))}
-        </motion.div>
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: { transition: { staggerChildren: 0.05 } },
+          hidden: {},
+        }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+      >
+        {initialMovies.map((movie, index) => (
+          <MovieCard key={movie.id} movie={movie} index={index} />
+        ))}
+      </motion.div>
     </section>
   );
 }

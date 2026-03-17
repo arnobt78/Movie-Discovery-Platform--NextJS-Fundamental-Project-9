@@ -1,7 +1,7 @@
 /**
  * Discover movies - SSR fetches with searchParams, passes to DiscoverPage.
  */
-import { fetchDiscoverMovies, fetchGenres } from "@/lib/tmdb";
+import { fetchDiscoverMovies, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { DiscoverPage } from "@/components/pages/DiscoverPage";
 
 interface DiscoverPageProps {
@@ -18,7 +18,7 @@ export default async function DiscoverRoute({ searchParams }: DiscoverPageProps)
   const year = params.year ? Number(params.year) : undefined;
   const sort = params.sort ?? "popularity.desc";
 
-  const [movies, genres] = await Promise.all([
+  const [moviesRaw, genres] = await Promise.all([
     fetchDiscoverMovies({
       genre_id: genreId,
       primary_release_year: year,
@@ -26,6 +26,8 @@ export default async function DiscoverRoute({ searchParams }: DiscoverPageProps)
     }),
     fetchGenres(),
   ]);
+
+  const movies = await enrichMoviesWithRuntime(moviesRaw);
 
   return <DiscoverPage initialMovies={movies} genres={genres} />;
 }

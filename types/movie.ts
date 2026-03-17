@@ -12,6 +12,7 @@ export interface Movie {
   vote_count?: number;
   release_date?: string;
   genre_ids?: number[];
+  runtime?: number;
 }
 
 export interface Genre {
@@ -49,6 +50,7 @@ export interface MovieDetail extends Movie {
   production_companies?: ProductionCompany[];
   production_countries?: ProductionCountry[];
   spoken_languages?: SpokenLanguage[];
+  belongs_to_collection?: BelongsToCollection | null;
 }
 
 export interface TmdbListResponse {
@@ -103,4 +105,111 @@ export interface TmdbDiscoverParams {
 
 export interface GenreListResponse {
   genres: Genre[];
+}
+
+export interface WatchProvider {
+  logo_path: string | null;
+  provider_id: number;
+  provider_name: string;
+  display_priority?: number;
+}
+
+export interface WatchProvidersByCountry {
+  link?: string;
+  flatrate?: WatchProvider[];
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+}
+
+export interface WatchProvidersResponse {
+  id: number;
+  results: Record<string, WatchProvidersByCountry>;
+}
+
+export interface Review {
+  id: string;
+  author: string;
+  author_details?: {
+    name?: string;
+    username?: string;
+    avatar_path?: string | null;
+    rating?: number;
+  };
+  content: string;
+  created_at: string;
+  updated_at?: string;
+  url?: string;
+}
+
+export interface ReviewsResponse {
+  id: number;
+  page: number;
+  results: Review[];
+  total_pages: number;
+  total_results: number;
+}
+
+/** Person (actor/director) from TMDB. */
+export interface Person {
+  id: number;
+  name: string;
+  biography?: string;
+  profile_path: string | null;
+  birthday?: string | null;
+  deathday?: string | null;
+  place_of_birth?: string | null;
+  known_for_department?: string;
+  popularity?: number;
+}
+
+/** Movie in person's credits (from movie_credits endpoint). */
+export interface PersonMovieCredit {
+  id: number;
+  title: string;
+  original_title: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path?: string | null;
+  release_date?: string;
+  vote_average?: number;
+  vote_count?: number;
+  character?: string;
+  job?: string;
+  credit_id?: string;
+  order?: number;
+}
+
+export interface PersonMovieCreditsResponse {
+  id: number;
+  cast: PersonMovieCredit[];
+  crew: PersonMovieCredit[];
+}
+
+/** Collection (movie series) from TMDB. */
+export interface CollectionPart {
+  id: number;
+  title: string;
+  original_title?: string;
+  overview?: string;
+  poster_path: string | null;
+  backdrop_path?: string | null;
+  release_date?: string;
+  vote_average?: number;
+}
+
+export interface Collection {
+  id: number;
+  name: string;
+  overview?: string;
+  poster_path: string | null;
+  backdrop_path?: string | null;
+  parts: CollectionPart[];
+}
+
+/** belongs_to_collection on movie detail. */
+export interface BelongsToCollection {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
 }

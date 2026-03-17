@@ -1,16 +1,9 @@
 /**
- * Global loading fallback - shown during route transitions.
+ * Root loading - home page replica (Hero + sections).
+ * Movie list routes use app/movies/loading.tsx.
  */
-import { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
+import { HomePageSkeleton } from "@/components/ui/HomePageSkeleton";
 
 export default function Loading() {
-  return (
-    <section className="max-w-7xl mx-auto py-7">
-      <div className="flex justify-start flex-wrap other:justify-evenly">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <MovieCardSkeleton key={i} />
-        ))}
-      </div>
-    </section>
-  );
+  return <HomePageSkeleton />;
 }

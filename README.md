@@ -2,7 +2,7 @@
 
 A full-fledged React web application built for discovering, exploring, and learning about movies using The Movie Database (TMDB) API. This project leverages modern React practices, component-level state management, TailwindCSS for styling, and Flowbite for UI components. It is designed as a practical, real-world example of how to build a dynamic, API-driven SPA (Single Page Application) with React, and is ideal for both learning and teaching purposes.
 
-- **Live-Demo:** [https://cinemate-arnob.netlify.app](https://cinemate-arnob.netlify.app)
+- **Live-Demo:** [https://latest-movie.vercel.app/](https://latest-movie.vercel.app/)
 
 <img width="1200" alt="Screenshot 2024-08-28 at 02 15 28" src="https://github.com/user-attachments/assets/78b99dd4-128c-4873-846d-09fa9925b30a"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 09" src="https://github.com/user-attachments/assets/02a5af59-2b26-4a56-97a3-b62099492a4b"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 36" src="https://github.com/user-attachments/assets/c3046cbe-497e-40fe-8d74-2e30c02f1a92">
 

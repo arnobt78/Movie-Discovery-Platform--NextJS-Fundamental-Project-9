@@ -20,13 +20,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem("darkMode");
-    const value = stored ? JSON.parse(stored) : false;
+    const value = stored !== null ? JSON.parse(stored) : document.documentElement.classList.contains("dark");
     setDarkMode(value);
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
+    document.cookie = `theme=${darkMode ? "dark" : "light"};path=/;max-age=31536000`;
     if (darkMode) {
       document.documentElement.classList.add("dark");
     } else {

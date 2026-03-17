@@ -7,6 +7,10 @@ import {
   fetchMovieCredits,
   fetchMovieVideos,
   fetchSimilarMovies,
+  fetchRecommendations,
+  fetchWatchProviders,
+  fetchReviews,
+  fetchCollectionById,
 } from "@/lib/tmdb";
 import { MovieDetailPage } from "@/components/pages/MovieDetailPage";
 
@@ -24,16 +28,31 @@ export async function generateMetadata({ params }: MoviePageProps) {
 
 export default async function MovieRoute({ params }: MoviePageProps) {
   const { id } = await params;
-  const [movie, credits, videos, similar] = await Promise.all([
-    fetchMovieById(id),
-    fetchMovieCredits(id),
-    fetchMovieVideos(id),
-    fetchSimilarMovies(id),
-  ]);
+  const movie = await fetchMovieById(id);
 
   if (!movie) {
     notFound();
   }
+
+  const [
+    credits,
+    videos,
+    similar,
+    recommendations,
+    watchProviders,
+    reviews,
+    collection,
+  ] = await Promise.all([
+    fetchMovieCredits(id),
+    fetchMovieVideos(id),
+    fetchSimilarMovies(id),
+    fetchRecommendations(id),
+    fetchWatchProviders(id),
+    fetchReviews(id),
+    movie.belongs_to_collection
+      ? fetchCollectionById(String(movie.belongs_to_collection.id))
+      : Promise.resolve(null),
+  ]);
 
   return (
     <MovieDetailPage
@@ -41,6 +60,10 @@ export default async function MovieRoute({ params }: MoviePageProps) {
       credits={credits}
       videos={videos}
       similarMovies={similar}
+      recommendations={recommendations ?? []}
+      watchProviders={watchProviders}
+      reviews={reviews?.results ?? []}
+      collection={collection}
     />
   );
 }

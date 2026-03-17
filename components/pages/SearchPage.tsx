@@ -22,12 +22,10 @@ export function SearchPage({ movies, query, isLoading }: SearchPageProps) {
     return (
       <>
         <section className="py-7">
-          <p className="text-3xl text-gray-700 dark:text-white">
-            Searching...
-          </p>
+          <p className="text-3xl text-gray-700 dark:text-white">Searching...</p>
         </section>
-        <section className="max-w-7xl mx-auto py-7">
-          <div className="flex justify-start flex-wrap">
+        <section className="max-w-9xl mx-auto py-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
               <MovieCardSkeleton key={i} />
             ))}
@@ -55,9 +53,9 @@ export function SearchPage({ movies, query, isLoading }: SearchPageProps) {
           {message}
         </motion.p>
       </section>
-      <section className="max-w-7xl mx-auto py-7">
+      <section className="max-w-9xl mx-auto py-7">
         <motion.div
-          className="flex justify-start flex-wrap"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           initial="hidden"
           animate="visible"
           variants={{

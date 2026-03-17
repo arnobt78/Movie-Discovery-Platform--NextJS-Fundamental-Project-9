@@ -16,12 +16,16 @@ interface MovieListPageProps {
   isLoading?: boolean;
 }
 
-export function MovieListPage({ movies, title, isLoading }: MovieListPageProps) {
+export function MovieListPage({
+  movies,
+  title,
+  isLoading,
+}: MovieListPageProps) {
   useTitle(title);
   if (isLoading) {
     return (
-      <section className="max-w-7xl mx-auto py-7">
-        <div className="flex justify-start flex-wrap other:justify-evenly">
+      <section className="max-w-9xl mx-auto py-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <MovieCardSkeleton key={i} />
           ))}
@@ -31,9 +35,9 @@ export function MovieListPage({ movies, title, isLoading }: MovieListPageProps) 
   }
 
   return (
-    <section className="max-w-7xl mx-auto py-7">
+    <section className="max-w-9xl mx-auto py-7">
       <motion.div
-        className="flex justify-start flex-wrap other:justify-evenly"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
         initial="hidden"
         animate="visible"
         variants={{

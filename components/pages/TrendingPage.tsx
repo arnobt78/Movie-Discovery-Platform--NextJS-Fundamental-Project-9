@@ -19,7 +19,7 @@ export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
   const movies = window === "day" ? dayMovies : weekMovies;
 
   return (
-    <section className="max-w-7xl mx-auto py-7">
+    <section className="max-w-9xl mx-auto py-7">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
-        className="flex justify-start flex-wrap other:justify-evenly gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
         {movies.map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />

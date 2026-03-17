@@ -13,6 +13,11 @@ import type {
   Genre,
   GenreListResponse,
   TmdbDiscoverParams,
+  WatchProvidersResponse,
+  ReviewsResponse,
+  Person,
+  PersonMovieCreditsResponse,
+  Collection,
 } from "@/types/movie";
 
 const API_BASE = "https://api.themoviedb.org/3";
@@ -79,6 +84,63 @@ export async function fetchSimilarMovies(id: string): Promise<Movie[]> {
   return json.results ?? [];
 }
 
+export async function fetchRecommendations(id: string): Promise<Movie[]> {
+  const key = getApiKey();
+  if (!key) return [];
+  const url = `${API_BASE}/movie/${id}/recommendations?api_key=${key}`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const json: TmdbListResponse = await res.json();
+  return json.results ?? [];
+}
+
+export async function fetchWatchProviders(id: string): Promise<WatchProvidersResponse | null> {
+  const key = getApiKey();
+  if (!key) return null;
+  const url = `${API_BASE}/movie/${id}/watch/providers?api_key=${key}`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function fetchReviews(id: string): Promise<ReviewsResponse | null> {
+  const key = getApiKey();
+  if (!key) return null;
+  const url = `${API_BASE}/movie/${id}/reviews?api_key=${key}`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function fetchPersonById(id: string): Promise<Person | null> {
+  const key = getApiKey();
+  if (!key) return null;
+  const url = `${API_BASE}/person/${id}?api_key=${key}`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function fetchPersonMovieCredits(
+  id: string
+): Promise<PersonMovieCreditsResponse | null> {
+  const key = getApiKey();
+  if (!key) return null;
+  const url = `${API_BASE}/person/${id}/movie_credits?api_key=${key}`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function fetchCollectionById(id: string): Promise<Collection | null> {
+  const key = getApiKey();
+  if (!key) return null;
+  const url = `${API_BASE}/collection/${id}?api_key=${key}`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  return res.json();
+}
+
 export async function fetchTrendingMovies(
   timeWindow: "day" | "week"
 ): Promise<Movie[]> {
@@ -117,4 +179,23 @@ export async function fetchGenres(): Promise<Genre[]> {
   if (!res.ok) return [];
   const json: GenreListResponse = await res.json();
   return json.genres ?? [];
+}
+
+/**
+ * Enriches movie list with runtime from detail API (list endpoints don't return runtime).
+ * Fetches details in parallel for up to 20 movies.
+ */
+export async function enrichMoviesWithRuntime(movies: Movie[]): Promise<Movie[]> {
+  if (movies.length === 0) return [];
+  const limit = Math.min(movies.length, 20);
+  const toEnrich = movies.slice(0, limit);
+  const details = await Promise.all(
+    toEnrich.map((m) => fetchMovieById(String(m.id)))
+  );
+  return movies.map((m, i) => {
+    if (i < limit && details[i]?.runtime != null) {
+      return { ...m, runtime: details[i]!.runtime };
+    }
+    return m;
+  });
 }

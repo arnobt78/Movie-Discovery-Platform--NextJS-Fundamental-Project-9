@@ -14,7 +14,7 @@ interface GenrePageProps {
 
 export function GenrePage({ movies, genreName }: GenrePageProps) {
   return (
-    <section className="max-w-7xl mx-auto py-7">
+    <section className="max-w-9xl mx-auto py-7">
       <motion.h1
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -29,7 +29,7 @@ export function GenrePage({ movies, genreName }: GenrePageProps) {
           visible: { transition: { staggerChildren: 0.05 } },
           hidden: {},
         }}
-        className="flex justify-start flex-wrap other:justify-evenly gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
         {movies.map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />

@@ -1,8 +1,7 @@
 "use client";
 
 /**
- * Header - nav bar with logo, search, dark toggle, nav links.
- * Client component: uses usePathname, useRouter, theme state.
+ * Header - nav bar with logo, search, theme toggle, nav links.
  */
 import { useState, FormEvent } from "react";
 import Link from "next/link";
@@ -11,9 +10,9 @@ import { useTheme } from "@/components/providers/ThemeProvider";
 import { RippleButton } from "@/components/ui/RippleButton";
 import { Clapperboard } from "lucide-react";
 
-const SearchIcon = () => (
+const SearchIcon = ({ className }: { className?: string }) => (
   <svg
-    className="w-5 h-5"
+    className={className ?? "w-5 h-5"}
     aria-hidden="true"
     fill="currentColor"
     viewBox="0 0 20 20"
@@ -114,12 +113,12 @@ export function Header() {
 
   return (
     <header>
-      <nav className="bg-white border-b-2 border-gray-200 px-2 sm:px-4 py-2 dark:bg-gray-900 dark:border-b-1 dark:border-gray-900">
+      <nav className="border-b-2 border-gray-200 px-2 sm:px-0 py-2 dark:border-b-1 dark:border-gray-700">
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/" className="flex items-center">
-            <Clapperboard className="mr-2 h-8 w-8 sm:h-9 sm:w-9" />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Movie Discovery Platform
+            <Clapperboard className="mr-2 h-8 w-8 sm:h-9 sm:w-9 text-gray-700 dark:text-white/80" />
+            <span className="self-center text-lg font-semibold whitespace-nowrap text-gray-700 dark:text-white/80">
+              Cinemate
             </span>
           </Link>
 
@@ -127,7 +126,7 @@ export function Header() {
             <RippleButton
               type="button"
               onClick={() => setDarkMode(!darkMode)}
-              className="flex items-center p-2 mr-2 text-xs font-medium text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+              className="flex items-center p-2 mr-2 text-xs font-medium text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             >
               {darkMode ? <SunIcon /> : <MoonIcon />}
             </RippleButton>
@@ -136,13 +135,13 @@ export function Header() {
               onClick={() => setHidden(!hidden)}
               aria-controls="navbar-search"
               aria-expanded={!hidden}
-              className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1"
+              className="md:hidden text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1"
             >
-              <SearchIcon />
+              <SearchIcon className="w-4 h-4" />
               <span className="sr-only">Search</span>
             </RippleButton>
             <div className="hidden relative md:block">
-              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none text-gray-600 dark:text-gray-400">
                 <SearchIcon />
                 <span className="sr-only">Search icon</span>
               </div>
@@ -165,12 +164,12 @@ export function Header() {
             id="navbar-search"
           >
             <div className="relative mt-3 md:hidden">
-              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none text-gray-600 dark:text-gray-400">
                 <SearchIcon />
               </div>
               <SearchForm />
             </div>
-            <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
               {navLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link

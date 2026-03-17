@@ -4,6 +4,7 @@
 import {
   fetchMovies,
   fetchTrendingMovies,
+  enrichMoviesWithRuntime,
 } from "@/lib/tmdb";
 import {
   HeroSection,
@@ -13,16 +14,22 @@ import {
 } from "@/components/sections";
 
 export default async function HomePage() {
-  const [trending, nowPlaying, topRated] = await Promise.all([
+  const [trendingRaw, nowPlayingRaw, topRatedRaw] = await Promise.all([
     fetchTrendingMovies("day"),
     fetchMovies("movie/now_playing"),
     fetchMovies("movie/top_rated"),
   ]);
 
+  const [trending, nowPlaying, topRated] = await Promise.all([
+    enrichMoviesWithRuntime(trendingRaw),
+    enrichMoviesWithRuntime(nowPlayingRaw),
+    enrichMoviesWithRuntime(topRatedRaw),
+  ]);
+
   const heroMovie = nowPlaying[0] ?? trending[0];
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-7">
+    <div className="w-full max-w-9xl mx-auto py-7">
       {heroMovie && <HeroSection movie={heroMovie} />}
       <TrendingSection movies={trending} />
       <NowPlayingSection movies={nowPlaying} />

@@ -1,7 +1,7 @@
 /**
  * Search page - SSR reads searchParams.q, fetches results, passes to SearchPage.
  */
-import { fetchMovies } from "@/lib/tmdb";
+import { fetchMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { SearchPage } from "@/components/pages/SearchPage";
 
 interface SearchPageProps {
@@ -11,9 +11,8 @@ interface SearchPageProps {
 export default async function SearchRoute({ searchParams }: SearchPageProps) {
   const { q } = await searchParams;
   const query = typeof q === "string" ? q.trim() : null;
-  const movies = query
-    ? await fetchMovies("search/movie", query)
-    : [];
+  const moviesRaw = query ? await fetchMovies("search/movie", query) : [];
+  const movies = await enrichMoviesWithRuntime(moviesRaw);
 
   return <SearchPage movies={movies} query={query} />;
 }
