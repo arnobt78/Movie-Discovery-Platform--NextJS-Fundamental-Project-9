@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * TopRatedPreviewSection - first 6 top-rated movies + "See all" link to /movies/top.
+ */
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";

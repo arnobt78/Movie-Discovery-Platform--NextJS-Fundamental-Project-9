@@ -1,274 +1,396 @@
 # Movie Discovery Platform – Next.js, React, TypeScript, TMDB API, TailwindCSS, Framer Motion Fundamental Project 9
 
-A full-fledged React web application built for discovering, exploring, and learning about movies using The Movie Database (TMDB) API. This project leverages modern React practices, component-level state management, TailwindCSS for styling, and Flowbite for UI components. It is designed as a practical, real-world example of how to build a dynamic, API-driven SPA (Single Page Application) with React, and is ideal for both learning and teaching purposes.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer-Motion-000000)](https://www.framer.com/motion/)
+[![TMDB API](https://img.shields.io/badge/TMDB-API-01b4e4)](https://developer.themoviedb.org/)
 
-- **Live-Demo:** [https://latest-movie.vercel.app/](https://latest-movie.vercel.app/)
+A full-stack movie discovery web app built with **Next.js**, **React**, and **TypeScript**, powered by **The Movie Database (TMDB) API**. It demonstrates modern patterns: App Router, server-side rendering, client components, TailwindCSS styling, Framer Motion animations, and reusable UI. Ideal for learning and teaching Next.js, API integration, and component-based architecture.
+
+- **Live Demo:** [https://latest-movie.vercel.app/](https://latest-movie.vercel.app/)
 
 <img width="1200" alt="Screenshot 2024-08-28 at 02 15 28" src="https://github.com/user-attachments/assets/78b99dd4-128c-4873-846d-09fa9925b30a"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 09" src="https://github.com/user-attachments/assets/02a5af59-2b26-4a56-97a3-b62099492a4b"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 36" src="https://github.com/user-attachments/assets/c3046cbe-497e-40fe-8d74-2e30c02f1a92">
 
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Project Structure](#project-structure)
-4. [Technologies Used](#technologies-used)
-5. [Setup and Installation](#setup-and-installation)
-6. [API and Environment Variables](#api-and-environment-variables)
-7. [Scripts and Usage](#scripts-and-usage)
-8. [Routing and Components](#routing-and-components)
-9. [Learning and Examples](#learning-and-examples)
-10. [Conclusion](#conclusion)
+2. [Features & Functionality](#features--functionality)
+3. [Tech Stack & Dependencies](#tech-stack--dependencies)
+4. [Project Structure](#project-structure)
+5. [Setup & Installation](#setup--installation)
+6. [Environment Variables](#environment-variables)
+7. [Scripts & How to Run](#scripts--how-to-run)
+8. [Routes & Pages](#routes--pages)
+9. [API Layer & TMDB Integration](#api-layer--tmdb-integration)
+10. [Components & Reusability](#components--reusability)
+11. [Learning Notes & Code Snippets](#learning-notes--code-snippets)
+12. [Keywords](#keywords)
+13. [Conclusion](#conclusion)
+14. [License](#license)
 
 ---
 
 ## Project Overview
 
-Cinemate MoviePedia provides users with a movie encyclopedia experience. Users can search for movies, view trending and popular films, see detailed movie information (cast, ratings, images), and enjoy a clean, responsive UI. The project is also structured to be educational, showcasing React best practices, modular code organization, and seamless API integration.
+**Movie Discovery Platform** is a movie encyclopedia where users can browse trending and popular films, search by title, filter by genre and year, and view detailed pages for movies, cast/crew (person pages), and collections. Data is fetched from the TMDB API; the app uses Next.js App Router for routing and a mix of server and client components. The codebase is structured for clarity and reuse, making it suitable for beginners and for sharing with others as a reference project.
 
 ---
 
-## Features
+## Features & Functionality
 
-- **Trending & Popular Movies:** Browse real-time trending and popular movies via The Movie Database (TMDB) API.
-- **Search Functionality:** Instantly search movies by title.
-- **Movie Details:** View detailed information for each movie, including overview, genres, cast, ratings, and images.
-- **Responsive Design:** Fully mobile-friendly and responsive using TailwindCSS and Flowbite UI components.
-- **Component-based Architecture:** Easy to understand, extend, and maintain.
-- **API Integration:** Learn how to fetch and display real data from external APIs in React.
-- **Environment Variables:** Securely manage API keys with `.env` files.
-- **Modern React Practices:** Utilizes functional components, React hooks, and React Router for SPA navigation.
+| Feature                                 | Description                                                                                                                                  |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Home**                                | Hero section, trending, now playing, and top-rated preview sections.                                                                         |
+| **Trending / Popular / Top / Upcoming** | Dedicated list pages for each TMDB list endpoint.                                                                                            |
+| **Discover**                            | Filter movies by genre, year, and sort order; uses API route and URL search params.                                                          |
+| **Search**                              | Client-side search by movie title via TMDB search endpoint.                                                                                  |
+| **Movie Detail**                        | Overview, cast, crew, trailers, similar movies, recommendations, watch providers (US), reviews, and collection link/section when applicable. |
+| **Person Detail**                       | Actor/director profile with biography and filmography (cast, director, other crew).                                                          |
+| **Collection Detail**                   | Movie series page (e.g. Harry Potter, Marvel) listing all parts.                                                                             |
+| **Theme**                               | Light/dark mode with cookie persistence and system preference support.                                                                       |
+| **Responsive UI**                       | Mobile-friendly layout and navigation.                                                                                                       |
+
+---
+
+## Tech Stack & Dependencies
+
+| Category      | Technology                                           | Purpose                                                         |
+| ------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| **Framework** | Next.js 16                                           | App Router, SSR, API routes, file-based routing.                |
+| **UI**        | React 19                                             | Components and hooks.                                           |
+| **Language**  | TypeScript 5.7                                       | Typed APIs and types in `types/movie.ts`.                       |
+| **Styling**   | Tailwind CSS 3.4                                     | Utility-first CSS.                                              |
+| **Animation** | Framer Motion 11                                     | Page and list animations.                                       |
+| **Icons**     | Lucide React                                         | Header and UI icons.                                            |
+| **Utilities** | `clsx`, `tailwind-merge`, `class-variance-authority` | Conditional and variant-based class names (e.g. Badge, Button). |
+| **Data**      | TMDB API v3                                          | All movie, person, and collection data.                         |
+
+**Important libraries (short):**
+
+- **Next.js** – React framework with server components, App Router, and API routes.
+- **Framer Motion** – Declarative animations (`motion.div`, `initial`, `animate`, `transition`).
+- **Tailwind** – Utility classes for layout and theming; dark mode via `dark:`.
+- **Lucide React** – Icon set used in Header and buttons.
 
 ---
 
 ## Project Structure
 
-The main structure of the project is as follows:
-
+```bash
+movie-discovery/
+├── app/                          # Next.js App Router
+│   ├── layout.tsx                # Root layout (fonts, theme, Header/Footer)
+│   ├── page.tsx                  # Home (trending, now playing, top rated)
+│   ├── loading.tsx               # Global loading UI
+│   ├── not-found.tsx             # 404 page
+│   ├── api/
+│   │   ├── discover/route.ts     # GET /api/discover (genre, year, sort)
+│   │   └── genres/route.ts       # GET /api/genres
+│   ├── movie/[id]/               # Movie detail (SSR)
+│   ├── person/[id]/              # Person detail (actor/director)
+│   ├── collection/[id]/          # Collection (movie series)
+│   ├── movies/
+│   │   ├── trending/
+│   │   ├── popular/
+│   │   ├── top/
+│   │   ├── upcoming/
+│   │   ├── discover/
+│   │   └── genre/[id]/
+│   └── search/
+├── components/
+│   ├── layout/                   # Header, Footer, ScrollToTop
+│   ├── pages/                    # Page-level components (MovieDetailPage, etc.)
+│   ├── sections/                # HeroSection, TrendingSection, etc.
+│   ├── ui/                      # Badge, MovieCard, CastCard, VideoCard, etc.
+│   └── providers/               # ThemeProvider, GenresProvider
+├── lib/
+│   ├── tmdb.ts                  # TMDB API client (all fetch helpers)
+│   └── utils.ts                 # cn() and helpers
+├── hooks/                       # useTitle, useFetch, useDiscoverParams
+├── context/                     # DiscoverContext
+├── types/
+│   └── movie.ts                 # Movie, Person, Collection, API types
+├── public/                      # favicon, images
+├── .env.example                 # Env template
+├── next.config.ts
+├── tailwind.config.ts
+└── package.json
 ```
-Cinemate-MoviePedia--React/
-│
-├── public/                  # Static assets, index.html
-├── src/                     # Source code
-│   ├── components/          # Reusable React components (e.g., MovieCard, Navbar)
-│   ├── pages/               # Application pages (e.g., Home, MovieDetails)
-│   ├── api/                 # API utilities for TMDB requests
-│   ├── App.js               # Main React component and routing setup
-│   ├── index.js             # Entry point for React
-│   └── ...                  # Other feature or utility folders/files
-├── package.json             # Project dependencies and scripts
-├── tailwind.config.js       # TailwindCSS configuration
-├── netlify.toml             # Netlify deployment config
-├── .gitignore
-└── README.md                # Project documentation
-```
-
-> _Note: Some folders like `api/`, `components/`, and `pages/` are assumed standard for React+API projects. Adjust to match your actual implementation as needed._
 
 ---
 
-## Technologies Used
+## Setup & Installation
 
-- **React** (with Hooks) – component-based UI
-- **React Router DOM** – SPA routing
-- **TailwindCSS** – utility-first CSS framework
-- **Flowbite** – UI components built on Tailwind
-- **TMDB API** – movie data provider
-- **Node.js / npm** – runtime and dependency management
+### Prerequisites
+
+- **Node.js** 18+ (LTS recommended). Download from [nodejs.org](https://nodejs.org/).
+
+### Steps
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <your-repo-url>
+   cd movie-discovery
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Environment variables (optional for running)**  
+   You can run the app without a `.env` file; movie data will not load without a TMDB API key. For full functionality, create a `.env` (or `.env.local`) as described in [Environment Variables](#environment-variables).
+
+4. **Start development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Setup and Installation
+## Environment Variables
 
-### 1. Clone the Repository
+**You do not need any environment variables to start the app.** To actually load data from TMDB, you must set an API key.
+
+| Variable                   | Required       | Description                                                            |
+| -------------------------- | -------------- | ---------------------------------------------------------------------- |
+| `TMDB_API_KEY`             | Yes (for data) | TMDB API key (server-side). Prefer this for security.                  |
+| `NEXT_PUBLIC_TMDB_API_KEY` | Optional       | Same key for client-side fetch if you ever call TMDB from the browser. |
+| `NEXT_PUBLIC_SITE_TITLE`   | Optional       | Used in `document.title` (e.g. "Cinemate"). Default used if unset.     |
+
+### How to get a TMDB API key
+
+1. Register or log in at [themoviedb.org](https://www.themoviedb.org/).
+2. Go to [API settings](https://www.themoviedb.org/settings/api) and create an API key (e.g. "Developer" type).
+3. Copy the key and add it to your project:
+
+Create a file `.env` or `.env.local` in the project root (do not commit real keys):
+
+```env
+# Required for movie/person/collection data
+TMDB_API_KEY=your-tmdb-api-key-here
+
+# Optional: site name in browser tab
+NEXT_PUBLIC_SITE_TITLE=Cinemate
+```
+
+You can copy from the provided example:
 
 ```bash
-git clone https://github.com/arnobt78/Cinemate-MoviePedia--React.git
-cd Cinemate-MoviePedia--React
+cp .env.example .env
+# Then edit .env and replace your-tmdb-api-key-here with your key.
 ```
 
 ---
 
-### 2. Install Node.js
+## Scripts & How to Run
 
-Please ensure Node.js is installed. Download from [https://nodejs.org/en/](https://nodejs.org/en/).
-
----
-
-### 3. Install Dependencies
-
-Install all required packages listed in `package.json`:
-
-```bash
-npm install
-```
+| Command         | Description                                                |
+| --------------- | ---------------------------------------------------------- |
+| `npm run dev`   | Start Next.js dev server (default port 3000).              |
+| `npm run build` | Production build.                                          |
+| `npm run start` | Run production build (run after `npm run build`).          |
+| `npm run lint`  | Run ESLint on app, components, lib, hooks, types, context. |
 
 ---
 
-### 4. Install TailwindCSS
+## Routes & Pages
 
-[Official TailwindCSS Installation Guide](https://tailwindcss.com/docs/installation)
+| Route                | Type         | Description                                                                               |
+| -------------------- | ------------ | ----------------------------------------------------------------------------------------- |
+| `/`                  | Server       | Home: hero, trending, now playing, top rated.                                             |
+| `/movies/trending`   | Server       | Trending movies.                                                                          |
+| `/movies/popular`    | Server       | Popular movies.                                                                           |
+| `/movies/top`        | Server       | Top rated.                                                                                |
+| `/movies/upcoming`   | Server       | Upcoming.                                                                                 |
+| `/movies/discover`   | Client + API | Discover with genre/year/sort filters.                                                    |
+| `/movies/genre/[id]` | Server       | Movies by genre.                                                                          |
+| `/search`            | Client       | Search by query.                                                                          |
+| `/movie/[id]`        | Server       | Movie detail (credits, videos, similar, recommendations, providers, reviews, collection). |
+| `/person/[id]`       | Server       | Person detail (bio, filmography).                                                         |
+| `/collection/[id]`   | Server       | Collection (movie series).                                                                |
+| `/api/discover`      | API          | GET; query params: `genre`, `year`, `sort`.                                               |
+| `/api/genres`        | API          | GET; returns genre list.                                                                  |
 
----
-
-### 5. Install Flowbite (TailwindCSS UI Framework)
-
-[Official Flowbite Quickstart](https://flowbite.com/docs/getting-started/quickstart/)
-
----
-
-### 6. Install React Router
-
-```bash
-npm install react-router-dom
-```
-
-[React Router Documentation](https://reactrouter.com/en/main)
-
----
-
-## API and Environment Variables
-
-### 1. Get a TMDB API Key
-
-- Register or log in at [https://www.themoviedb.org/](https://www.themoviedb.org/)
-- Generate your API key here: [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api)
-
-### 2. Configure the `.env` file
-
-In your project root, add:
-
-```
-REACT_APP_API_KEY=your-tmdb-api-key-here
-```
-
-> Never commit your actual API key to a public repo!
-
-### 3. TMDB API Resources
-
-- [TMDB Official Docs](https://developer.themoviedb.org/docs)
-- [Image URL Construction](https://developer.themoviedb.org/docs/image-basics)
+Navigation is handled by Next.js `<Link>` and `useRouter`; the header uses `usePathname()` for active state.
 
 ---
 
-## Scripts and Usage
+## API Layer & TMDB Integration
 
-In the project directory, you can run:
+All TMDB calls live in **`lib/tmdb.ts`**. The API key is read from `TMDB_API_KEY` or `NEXT_PUBLIC_TMDB_API_KEY`. Base URL: `https://api.themoviedb.org/3`.
 
-### `npm start`
+### Main functions
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Function                           | TMDB endpoint (concept)           | Returns                              |
+| ---------------------------------- | --------------------------------- | ------------------------------------ |
+| `fetchMovies(path, query?)`        | Generic list / search             | `Movie[]`                            |
+| `fetchMovieById(id)`               | `GET /movie/{id}`                 | `MovieDetail \| null`                |
+| `fetchMovieCredits(id)`            | `GET /movie/{id}/credits`         | `MovieCredits \| null`               |
+| `fetchMovieVideos(id)`             | `GET /movie/{id}/videos`          | `Video[]` (YouTube trailers)         |
+| `fetchSimilarMovies(id)`           | `GET /movie/{id}/similar`         | `Movie[]`                            |
+| `fetchRecommendations(id)`         | `GET /movie/{id}/recommendations` | `Movie[]`                            |
+| `fetchWatchProviders(id)`          | `GET /movie/{id}/watch/providers` | `WatchProvidersResponse \| null`     |
+| `fetchReviews(id)`                 | `GET /movie/{id}/reviews`         | `ReviewsResponse \| null`            |
+| `fetchPersonById(id)`              | `GET /person/{id}`                | `Person \| null`                     |
+| `fetchPersonMovieCredits(id)`      | `GET /person/{id}/movie_credits`  | `PersonMovieCreditsResponse \| null` |
+| `fetchCollectionById(id)`          | `GET /collection/{id}`            | `Collection \| null`                 |
+| `fetchTrendingMovies(day \| week)` | `GET /trending/movie/{window}`    | `Movie[]`                            |
+| `fetchDiscoverMovies(params)`      | `GET /discover/movie`             | `Movie[]`                            |
+| `fetchGenres()`                    | `GET /genre/movie/list`           | `Genre[]`                            |
+| `enrichMoviesWithRuntime(movies)`  | Batch detail fetch                | `Movie[]` (with runtime)             |
 
----
+### Example: fetching and using data (server component)
 
-### `npm test`
+```tsx
+// app/movie/[id]/page.tsx (simplified)
+import { fetchMovieById, fetchMovieCredits } from "@/lib/tmdb";
 
-Launches the test runner in interactive watch mode.\
-See about [running tests](https://facebook.github.io/create-react-app/docs/running-tests).
-
----
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-See about [deployment](https://facebook.github.io/create-react-app/docs/deployment).
-
----
-
-### `npm run eject`
-
-**Note:** This is a one-way operation. Once you `eject`, you can’t go back!
-
----
-
-## Routing and Components
-
-The application uses React Router to handle navigation between pages:
-
-Example (in `App.js`):
-
-```jsx
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/movie/:id" element={<MovieDetails />} />
-        {/* Add more routes as needed */}
-      </Routes>
-    </Router>
-  );
+export default async function MovieRoute({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const [movie, credits] = await Promise.all([
+    fetchMovieById(id),
+    fetchMovieCredits(id),
+  ]);
+  if (!movie) notFound();
+  return <MovieDetailPage movie={movie} credits={credits} />;
 }
 ```
 
+Types for responses are in **`types/movie.ts`** (e.g. `Movie`, `MovieDetail`, `Person`, `Collection`, `Review`, `WatchProvidersResponse`).
+
 ---
 
-### Example Components
+## Components & Reusability
 
-**MovieCard.js**
+### Layout
 
-```jsx
-function MovieCard({ movie }) {
-  return (
-    <div className="bg-white shadow rounded p-4">
-      <img
-        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-        alt={movie.title}
-      />
-      <h3 className="mt-2 font-bold">{movie.title}</h3>
-      <p>Rating: {movie.vote_average}</p>
-      {/* Link to details, genres, etc. */}
-    </div>
-  );
+- **Header** – Logo, nav links, search form (redirect to `/search?q=...`), theme toggle.
+- **Footer** – Links and branding.
+- **ScrollToTop** – Button to scroll to top.
+
+### Page components (`components/pages/`)
+
+- **MovieDetailPage** – Full movie detail (poster, meta, cast, trailers, similar, recommendations, watch providers, reviews, collection).
+- **PersonDetailPage** – Person bio and filmography (acting, director, other crew).
+- **CollectionDetailPage** – Collection name, overview, list of movies.
+- **MovieListPage** – Shared list layout for trending/popular/top/upcoming.
+- **DiscoverPage** – Filters (genre, year, sort) and grid.
+- **SearchPage** – Search input and results.
+- **TrendingPage**, **GenrePage**, **NotFoundPage** – Specific list or 404 UI.
+
+### UI components (`components/ui/`)
+
+- **MovieCard** – Poster, title, rating, runtime; links to `/movie/[id]`.
+- **SimilarMovieCard** – Smaller card for similar/recommendations/collection; same link.
+- **CastCard** – Profile image, name, character; links to `/person/[id]`.
+- **VideoCard** – Embedded YouTube trailer.
+- **Badge** – Genre/style tags; variants: `default`, `secondary`, `outline`.
+- **Card**, **RippleButton**, **RippleLink** – Styled container and buttons.
+- **GenreFilter**, **YearFilter**, **SortSelect** – Discover filters.
+- **MovieCardSkeleton**, **MovieDetailSkeleton**, **HomePageSkeleton**, **Skeleton** – Loading placeholders.
+
+### How to reuse in another project
+
+1. Copy **`lib/tmdb.ts`** and **`types/movie.ts`** for data and types.
+2. Reuse **`components/ui/*`** (e.g. `MovieCard`, `Badge`) by copying the folder and ensuring `@/lib/utils` (e.g. `cn`) and Tailwind are available.
+3. Use **`hooks/useTitle`** in any client page that sets `document.title`.
+4. Use **`components/providers/ThemeProvider`** if you want the same theme (dark/light) and cookie behavior.
+
+---
+
+## Learning Notes & Code Snippets
+
+### Server vs client
+
+- **Server components** (default in App Router): no `"use client"`; can `await fetch` and pass data as props. Used in `app/page.tsx`, `app/movie/[id]/page.tsx`, etc.
+- **Client components**: add `"use client"` at the top when you need `useState`, `useEffect`, event handlers, or browser APIs. Used in `Header`, `MovieDetailPage`, `DiscoverPage`, etc.
+
+### Setting document title (client)
+
+```tsx
+// hooks/useTitle.ts
+export function useTitle(title: string | undefined) {
+  useEffect(() => {
+    if (title) document.title = `${title} | ${SITE_TITLE}`;
+  }, [title]);
 }
 ```
 
----
+Use in a client page: `useTitle(movie.title);`.
 
-**API Fetch Example (api/tmdb.js)**
+### Conditional CSS with `cn` (Tailwind + clsx)
 
-```js
-const API_KEY = process.env.REACT_APP_API_KEY;
-const BASE_URL = "https://api.themoviedb.org/3";
+```tsx
+// lib/utils.ts
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-export async function fetchTrendingMovies() {
-  const response = await fetch(
-    `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`,
-  );
-  const data = await response.json();
-  return data.results;
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
 ```
 
----
+Example in a component:
 
-## Learning and Examples
+```tsx
+<div className={cn("base-classes", isActive && "active-classes", className)} />
+```
 
-- **Component-based development:** Learn to break down your UI into modular, testable components.
-- **API integration with Fetch/Axios:** Understand how to request and process external API data.
-- **SPA Routing:** Seamless navigation between movie lists and individual movie detail pages.
-- **Environment variables:** Securely manage sensitive keys.
-- **TailwindCSS & Flowbite:** Rapidly build and style modern UIs.
-- **Deployment:** Example config for Netlify deployment with `netlify.toml`.
+### Framer Motion entrance animation
 
----
+```tsx
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3, delay: 0.1 }}
+>
+  {children}
+</motion.div>
+```
 
-## Conclusion
+### Next.js image and TMDB
 
-Cinemate MoviePedia is a modern, educational project designed to help you master React, RESTful APIs, and rapid UI development with TailwindCSS. Use this project as a base for your own movie apps, as a teaching resource, or as a learning playground for advanced React concepts.
+Posters and backdrops use `https://image.tmdb.org/t/p/{size}/{path}`. `next.config.ts` includes `remotePatterns` for `image.tmdb.org` and `img.youtube.com` so `next/image` works.
 
 ---
 
 ## Keywords
 
-`React`, `SPA`, `Movie App`, `TMDB`, `API Integration`, `TailwindCSS`, `Flowbite`, `Hooks`, `React Router`, `Component-based`, `Responsive Web App`, `Netlify Deployment`, `Environment Variables`, `Educational Project`, `Teaching Resource`
+`Next.js`, `React`, `TypeScript`, `TMDB API`, `movie discovery`, `App Router`, `server components`, `Tailwind CSS`, `Framer Motion`, `responsive`, `dark mode`, `person page`, `collection`, `watch providers`, `reviews`, `recommendations`, `educational`, `open source`
 
 ---
 
-## Happy Coding! 🎬🍿
+## Conclusion
 
-Thank you for exploring Cinemate MoviePedia. Contributions and feedback are welcome!
+This project is a complete example of a **Next.js 16** movie app with **React 19** and **TypeScript**: App Router, server/client split, TMDB integration, person and collection pages, and reusable UI. Use it to learn routing, data fetching, env vars, and component structure, or as a base to extend with more TMDB features or your own backend.
 
 ---
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). You may use, modify, and distribute the code in accordance with the license terms.
+
+---
+
+## Happy Coding! 🎉
+
+This is an **open-source project** — feel free to use, extend, and learn from it.
+
+If you have questions or want to share what you built, you can reach out via GitHub or the portfolio: [https://www.arnobmahmud.com](https://www.arnobmahmud.com).
+
+**Enjoy building and learning!** 🚀
+
+Thank you! 😊

@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * PersonDetailPage - actor/director profile with filmography.
+ * PersonDetailPage - actor/director profile: photo, bio, acting/director/other credits.
+ * Each credit links to /movie/[id]. Data from app/person/[id] route.
  */
 import Image from "next/image";
 import Link from "next/link";
@@ -173,6 +174,7 @@ export function PersonDetailPage({
   );
 }
 
+/** Single movie in person's filmography; links to /movie/[id], shows character or job. */
 function PersonMovieCard({
   credit,
   index = 0,

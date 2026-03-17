@@ -1,5 +1,6 @@
 "use client";
 
+/** Discover page: sort dropdown; values match TMDB discover/movie sort_by param. */
 import { motion } from "framer-motion";
 
 const SORT_OPTIONS = [

@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * NowPlayingSection - grid of now-playing movies on home (full list from server).
+ */
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";
 import { MovieCard } from "@/components/ui/MovieCard";

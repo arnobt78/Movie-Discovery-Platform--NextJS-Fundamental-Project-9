@@ -1,5 +1,6 @@
 /**
- * Person detail page - actor/director profile with filmography.
+ * Person detail route: /person/[id]
+ * Server component: fetches person details and movie_credits (cast + crew) in parallel.
  */
 import { notFound } from "next/navigation";
 import {

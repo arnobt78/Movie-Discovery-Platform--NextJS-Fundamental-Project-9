@@ -2,6 +2,7 @@
 
 /**
  * useDiscoverParams - reads genre, year, sort from URL searchParams.
+ * Keeps discover page in sync with URL for shareable/bookmarkable filter state.
  */
 import { useSearchParams } from "next/navigation";
 

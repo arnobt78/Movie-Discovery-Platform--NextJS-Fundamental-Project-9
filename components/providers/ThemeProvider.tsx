@@ -17,6 +17,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [darkMode, setDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // Hydrate from localStorage/cookie on mount to avoid flash.
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem("darkMode");
@@ -24,6 +25,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setDarkMode(value);
   }, []);
 
+  // Persist to localStorage and cookie; root layout reads cookie for SSR.
   useEffect(() => {
     if (!mounted) return;
     localStorage.setItem("darkMode", JSON.stringify(darkMode));

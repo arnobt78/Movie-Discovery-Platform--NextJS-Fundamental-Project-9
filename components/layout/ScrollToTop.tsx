@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * ScrollToTop - scrolls window to top on route change.
+ * ScrollToTop - scrolls window to top when pathname changes (e.g. after navigation).
  */
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";

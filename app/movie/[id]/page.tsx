@@ -1,5 +1,7 @@
 /**
- * Movie detail page - SSR fetches movie, credits, videos, similar.
+ * Movie detail route: /movie/[id]
+ * Server component: fetches movie + credits, videos, similar, recommendations,
+ * watch providers, reviews, and collection (if belongs_to_collection) in parallel.
  */
 import { notFound } from "next/navigation";
 import {
@@ -18,6 +20,7 @@ interface MoviePageProps {
   params: Promise<{ id: string }>;
 }
 
+// Next.js uses this for <title> and SEO; params are a Promise in Next 15+.
 export async function generateMetadata({ params }: MoviePageProps) {
   const { id } = await params;
   const movie = await fetchMovieById(id);
@@ -34,6 +37,7 @@ export default async function MovieRoute({ params }: MoviePageProps) {
     notFound();
   }
 
+  // Fetch all related data in parallel; collection only when movie is part of a series.
   const [
     credits,
     videos,

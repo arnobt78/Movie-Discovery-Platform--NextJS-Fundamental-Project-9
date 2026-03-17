@@ -1,3 +1,4 @@
+/** Shown while person detail data is loading (SSR). */
 export default function PersonLoading() {
   return (
     <div className="w-full py-8 animate-pulse">

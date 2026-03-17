@@ -20,6 +20,7 @@ const defaultState: DiscoverState = {
 
 const DiscoverContext = createContext<DiscoverState>(defaultState);
 
+/** Consume discover filter state; provider wraps DiscoverPage and passes URL-derived state. */
 export function useDiscoverState() {
   return useContext(DiscoverContext);
 }

@@ -16,7 +16,7 @@ interface TrendingPageProps {
 
 export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
   const [window, setWindow] = useState<"day" | "week">("day");
-  const movies = window === "day" ? dayMovies : weekMovies;
+  const movies = window === "day" ? dayMovies : weekMovies; // Both lists pre-fetched on server.
 
   return (
     <section className="max-w-9xl mx-auto py-7">

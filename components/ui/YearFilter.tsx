@@ -1,5 +1,6 @@
 "use client";
 
+/** Discover page: year dropdown (last 30 years); value maps to TMDB primary_release_year. */
 import { motion } from "framer-motion";
 
 const CURRENT_YEAR = new Date().getFullYear();

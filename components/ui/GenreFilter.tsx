@@ -1,5 +1,6 @@
 "use client";
 
+/** Discover page: "All" + genre pills; onSelect drives URL via DiscoverPage updateParams. */
 import { motion } from "framer-motion";
 import type { Genre } from "@/types/movie";
 

@@ -1,6 +1,7 @@
 /**
- * TMDB API client - fetches movie data.
+ * TMDB API client - all data fetching for movies, persons, collections.
  * Uses env: TMDB_API_KEY (server) or NEXT_PUBLIC_TMDB_API_KEY (client).
+ * Base: https://api.themoviedb.org/3
  */
 
 import type {
@@ -22,11 +23,13 @@ import type {
 
 const API_BASE = "https://api.themoviedb.org/3";
 
+// Prefer server key; fallback to public for client-side usage.
 function getApiKey(): string {
   const key = process.env.TMDB_API_KEY ?? process.env.NEXT_PUBLIC_TMDB_API_KEY ?? "";
   return key;
 }
 
+/** Generic list fetcher: e.g. fetchMovies("movie/popular") or fetchMovies("search/movie", "query"). */
 export async function fetchMovies(
   apiPath: string,
   query?: string
@@ -61,6 +64,7 @@ export async function fetchMovieCredits(id: string): Promise<MovieCredits | null
   return res.json();
 }
 
+/** Returns only YouTube Trailers and Teasers for embedding. */
 export async function fetchMovieVideos(id: string): Promise<Video[]> {
   const key = getApiKey();
   if (!key) return [];

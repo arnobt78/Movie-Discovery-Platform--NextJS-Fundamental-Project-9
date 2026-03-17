@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 
+/** Pulse placeholder block; used by MovieCardSkeleton, MovieDetailSkeleton, HomePageSkeleton. */
 function Skeleton({
   className,
   ...props

@@ -1,8 +1,7 @@
 "use client";
 
 /**
- * SearchPage - client component for search results.
- * Receives movies and query from SSR parent.
+ * SearchPage - search results grid. Data comes from SSR (route reads ?q=); optional isLoading for client use.
  */
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";

@@ -45,6 +45,7 @@ export function MovieListPage({
           hidden: {},
         }}
       >
+        {/* Stagger: each MovieCard animates in with a short delay for list effect. */}
         {movies.map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}

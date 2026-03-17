@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Header - nav bar with logo, search, theme toggle, nav links.
+ * Header - nav bar with logo, search (redirects to /search?q=), theme toggle, nav links.
+ * Client component: uses pathname for active link, router for search redirect.
  */
 import { useState, FormEvent } from "react";
 import Link from "next/link";
@@ -80,6 +81,7 @@ const navLinks = [
 ];
 
 export function Header() {
+  // Mobile: collapse state for nav + search drawer.
   const [hidden, setHidden] = useState(true);
   const { darkMode, setDarkMode } = useTheme();
   const pathname = usePathname();
@@ -90,6 +92,7 @@ export function Header() {
   const inActiveClass =
     "text-base block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700";
 
+  // Redirect to /search?q=... instead of client-side fetch so URL is shareable.
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;

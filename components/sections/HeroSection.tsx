@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * HeroSection - home page hero: backdrop image, poster, title, overview, "View Details" link.
+ */
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";

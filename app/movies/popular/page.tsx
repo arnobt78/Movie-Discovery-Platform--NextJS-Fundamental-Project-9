@@ -1,5 +1,5 @@
 /**
- * Popular movies - SSR fetches popular, passes to MovieListPage.
+ * Route: /movies/popular — single list of popular movies via MovieListPage.
  */
 import { fetchMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { MovieListPage } from "@/components/pages/MovieListPage";

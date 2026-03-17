@@ -1,7 +1,9 @@
 /**
  * TMDB API response types for movie discovery app.
+ * Shapes match TMDB v3 responses; used by lib/tmdb and components.
  */
 
+/** List item from /movie/popular, /discover/movie, etc. */
 export interface Movie {
   id: number;
   original_title: string;

@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * TrendingSection - horizontal scroll of first 10 trending movies + "See all" to /movies/trending.
+ */
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";

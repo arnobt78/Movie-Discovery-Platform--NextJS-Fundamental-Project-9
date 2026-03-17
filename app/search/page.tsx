@@ -1,5 +1,5 @@
 /**
- * Search page - SSR reads searchParams.q, fetches results, passes to SearchPage.
+ * Route: /search — reads ?q= from URL, fetches TMDB search/movie, passes to SearchPage.
  */
 import { fetchMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { SearchPage } from "@/components/pages/SearchPage";

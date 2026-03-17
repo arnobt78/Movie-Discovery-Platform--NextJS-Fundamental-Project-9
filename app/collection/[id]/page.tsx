@@ -1,5 +1,6 @@
 /**
- * Collection detail page - movie series (e.g., Harry Potter, Marvel).
+ * Collection detail route: /collection/[id]
+ * Server component: fetches collection (name, overview, parts[]) from TMDB.
  */
 import { notFound } from "next/navigation";
 import { fetchCollectionById } from "@/lib/tmdb";

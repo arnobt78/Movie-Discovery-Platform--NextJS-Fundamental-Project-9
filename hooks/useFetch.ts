@@ -22,6 +22,7 @@ export function useFetch(
   if (queryTerm) params.set("query", queryTerm);
   const url = `${API_BASE}/${apiPath}?${params.toString()}`;
 
+  // Abort on unmount so setState isn't called after unmount.
   useEffect(() => {
     if (!key) {
       setData([]);

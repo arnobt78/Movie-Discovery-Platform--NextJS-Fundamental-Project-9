@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * CollectionDetailPage - movie series (e.g., Harry Potter, Marvel).
+ * CollectionDetailPage - collection name, overview, and grid of parts (movies in series).
  */
 import { motion } from "framer-motion";
 import type { Collection } from "@/types/movie";

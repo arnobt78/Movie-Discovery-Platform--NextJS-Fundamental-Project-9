@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * GenrePage - movies by genre.
+ * GenrePage - grid of movies for one genre; title shows genre name from route.
  */
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";

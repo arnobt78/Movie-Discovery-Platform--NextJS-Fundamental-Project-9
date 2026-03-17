@@ -1,5 +1,6 @@
 /**
- * API route for discover movies - used by client filter updates.
+ * API route: GET /api/discover
+ * Query params: genre (id), year, sort. Used by DiscoverPage when user changes filters.
  */
 import { NextRequest } from "next/server";
 import { fetchDiscoverMovies } from "@/lib/tmdb";

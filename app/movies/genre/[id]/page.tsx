@@ -1,5 +1,5 @@
 /**
- * Movies by genre - SSR fetches by genre id.
+ * Route: /movies/genre/[id] — movies filtered by genre; metadata uses genre name.
  */
 import { notFound } from "next/navigation";
 import { fetchDiscoverMovies, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";

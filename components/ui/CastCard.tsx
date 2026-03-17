@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * CastCard - cast member photo, name, character; links to /person/[id].
+ */
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";

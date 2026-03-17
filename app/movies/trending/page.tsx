@@ -1,5 +1,6 @@
 /**
- * Trending movies - SSR fetches day and week, passes to TrendingPage.
+ * Route: /movies/trending
+ * Fetches trending/day and trending/week, enriches with runtime, renders two tabs.
  */
 import { fetchTrendingMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { TrendingPage } from "@/components/pages/TrendingPage";

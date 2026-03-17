@@ -1,3 +1,4 @@
+/** Shown while collection detail is loading (SSR). */
 export default function CollectionLoading() {
   return (
     <div className="w-full py-8 animate-pulse">

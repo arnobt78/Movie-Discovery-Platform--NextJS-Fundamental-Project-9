@@ -1,6 +1,7 @@
 /**
  * Root layout - SSR layout for the entire app.
- * Theme: cookie for SSR (no flash on refresh), script for first visit.
+ * Wraps every page with Header, main content, Footer, and theme/genres providers.
+ * Theme: cookie for SSR (no flash on refresh), inline script for first visit.
  */
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -26,6 +27,7 @@ import { ScrollToTop } from "@/components/layout/ScrollToTop";
 
 const SITE_URL = "https://latest-movie.vercel.app";
 
+// SEO: used by Next.js for <head> and social previews (Open Graph, Twitter, etc.)
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -90,6 +92,7 @@ export const metadata: Metadata = {
   category: "entertainment",
 };
 
+// Runs before React hydrates: applies dark/light class from cookie or localStorage or system preference to avoid flash.
 const THEME_SCRIPT = `(function(){
   var c=document.cookie.match(/theme=(dark|light)/);
   var v=c?c[1]==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;
@@ -103,6 +106,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Read theme from cookie so SSR-rendered HTML has correct dark/light class (no flash).
   const cookieStore = await cookies();
   const themeCookie = cookieStore.get("theme");
   const isDark = themeCookie?.value === "dark";

@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * GenresProvider - fetches and provides genre list for mapping genre_ids to names.
+ * GenresProvider - fetches genre list from /api/genres and provides it via context.
+ * Used to map genre_ids to names (e.g. in MovieCard, Discover filters).
  */
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Genre } from "@/types/movie";

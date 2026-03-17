@@ -2,6 +2,7 @@
 
 /**
  * DiscoverPage - discover movies with genre, year, sort filters.
+ * URL searchParams drive filters; updateParams pushes new query and triggers server re-render.
  */
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -31,6 +32,7 @@ export function DiscoverPage({ initialMovies, genres }: DiscoverPageProps) {
     router.push("/movies/discover");
   }, [router]);
 
+  // Build new searchParams and navigate so the server component re-fetches with new filters.
   const updateParams = useCallback(
     (updates: {
       genre?: number | null;

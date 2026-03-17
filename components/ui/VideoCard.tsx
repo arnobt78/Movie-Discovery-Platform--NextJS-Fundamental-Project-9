@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * VideoCard - YouTube thumbnail; click opens modal with embedded player (video.key).
+ */
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";

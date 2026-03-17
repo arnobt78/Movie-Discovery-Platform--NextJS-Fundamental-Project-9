@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * SimilarMovieCard - compact poster + title; used in horizontal lists (similar, recommendations, collection).
+ */
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";

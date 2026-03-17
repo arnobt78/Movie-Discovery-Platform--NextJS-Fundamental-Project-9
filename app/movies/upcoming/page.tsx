@@ -1,5 +1,5 @@
 /**
- * Upcoming movies - SSR fetches upcoming, passes to MovieListPage.
+ * Route: /movies/upcoming — upcoming movies list via MovieListPage.
  */
 import { fetchMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { MovieListPage } from "@/components/pages/MovieListPage";

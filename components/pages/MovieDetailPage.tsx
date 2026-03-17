@@ -2,7 +2,9 @@
 
 /**
  * MovieDetailPage - client component for single movie detail.
- * Receives movie, credits, videos, similar from SSR parent.
+ * Receives all data from SSR parent (app/movie/[id]/page). Renders poster, meta,
+ * cast (links to /person/[id]), trailers, similar, recommendations, watch providers,
+ * reviews, and collection section when applicable.
  */
 import Image from "next/image";
 import Link from "next/link";
@@ -37,6 +39,7 @@ function formatCurrency(value: number | undefined): string {
 
 const IMAGE_BASE_PROVIDER = "https://image.tmdb.org/t/p/original";
 
+/** Renders stream/rent/buy providers for a region (e.g. US); includes JustWatch attribution. */
 function WatchProvidersSection({
   providers,
 }: {
