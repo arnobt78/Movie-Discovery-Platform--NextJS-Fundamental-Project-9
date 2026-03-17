@@ -1,16 +1,10 @@
-# Cinemate MoviePedia – React
+# Movie Discovery Platform – Next.js, React, TypeScript, TMDB API, TailwindCSS, Framer Motion Fundamental Project 9
 
-<img width="1200" alt="Screenshot 2024-08-28 at 02 15 28" src="https://github.com/user-attachments/assets/78b99dd4-128c-4873-846d-09fa9925b30a"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 09" src="https://github.com/user-attachments/assets/02a5af59-2b26-4a56-97a3-b62099492a4b"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 36" src="https://github.com/user-attachments/assets/c3046cbe-497e-40fe-8d74-2e30c02f1a92">
-
----
-
-## Project Summary
-
-Cinemate MoviePedia is a full-fledged React web application built for discovering, exploring, and learning about movies using The Movie Database (TMDB) API. This project leverages modern React practices, component-level state management, TailwindCSS for styling, and Flowbite for UI components. It is designed as a practical, real-world example of how to build a dynamic, API-driven SPA (Single Page Application) with React, and is ideal for both learning and teaching purposes.
+A full-fledged React web application built for discovering, exploring, and learning about movies using The Movie Database (TMDB) API. This project leverages modern React practices, component-level state management, TailwindCSS for styling, and Flowbite for UI components. It is designed as a practical, real-world example of how to build a dynamic, API-driven SPA (Single Page Application) with React, and is ideal for both learning and teaching purposes.
 
 - **Live-Demo:** [https://cinemate-arnob.netlify.app](https://cinemate-arnob.netlify.app)
 
----
+<img width="1200" alt="Screenshot 2024-08-28 at 02 15 28" src="https://github.com/user-attachments/assets/78b99dd4-128c-4873-846d-09fa9925b30a"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 09" src="https://github.com/user-attachments/assets/02a5af59-2b26-4a56-97a3-b62099492a4b"> <img width="1200" alt="Screenshot 2024-08-28 at 02 16 36" src="https://github.com/user-attachments/assets/c3046cbe-497e-40fe-8d74-2e30c02f1a92">
 
 ## Table of Contents
 
@@ -67,7 +61,8 @@ Cinemate-MoviePedia--React/
 ├── .gitignore
 └── README.md                # Project documentation
 ```
-> *Note: Some folders like `api/`, `components/`, and `pages/` are assumed standard for React+API projects. Adjust to match your actual implementation as needed.*
+
+> _Note: Some folders like `api/`, `components/`, and `pages/` are assumed standard for React+API projects. Adjust to match your actual implementation as needed._
 
 ---
 
@@ -126,6 +121,7 @@ npm install
 ```bash
 npm install react-router-dom
 ```
+
 [React Router Documentation](https://reactrouter.com/en/main)
 
 ---
@@ -144,6 +140,7 @@ In your project root, add:
 ```
 REACT_APP_API_KEY=your-tmdb-api-key-here
 ```
+
 > Never commit your actual API key to a public repo!
 
 ### 3. TMDB API Resources
@@ -191,7 +188,7 @@ The application uses React Router to handle navigation between pages:
 Example (in `App.js`):
 
 ```jsx
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
@@ -211,11 +208,15 @@ function App() {
 ### Example Components
 
 **MovieCard.js**
+
 ```jsx
 function MovieCard({ movie }) {
   return (
     <div className="bg-white shadow rounded p-4">
-      <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
+      <img
+        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+        alt={movie.title}
+      />
       <h3 className="mt-2 font-bold">{movie.title}</h3>
       <p>Rating: {movie.vote_average}</p>
       {/* Link to details, genres, etc. */}
@@ -223,19 +224,24 @@ function MovieCard({ movie }) {
   );
 }
 ```
+
 ---
 
 **API Fetch Example (api/tmdb.js)**
+
 ```js
 const API_KEY = process.env.REACT_APP_API_KEY;
-const BASE_URL = 'https://api.themoviedb.org/3';
+const BASE_URL = "https://api.themoviedb.org/3";
 
 export async function fetchTrendingMovies() {
-  const response = await fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`);
+  const response = await fetch(
+    `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`,
+  );
   const data = await response.json();
   return data.results;
 }
 ```
+
 ---
 
 ## Learning and Examples
