@@ -29,7 +29,16 @@ A full-stack movie discovery web app built with **Next.js**, **React**, and **Ty
 13. [Conclusion](#conclusion)
 14. [License](#license)
 
----
+![Image 1](https://github.com/user-attachments/assets/5f90544b-6c24-4084-9635-30dce3aa6f42)
+![Image 2](https://github.com/user-attachments/assets/617ab1d3-d180-48c9-9a89-61c601bd8fcf)
+![Image 3](https://github.com/user-attachments/assets/33dadb48-d323-4bc9-9af5-37ec6d5e0075)
+![Image 4](https://github.com/user-attachments/assets/0b6f6b9c-1fa7-447f-9509-278b37344743)
+![Image 5](https://github.com/user-attachments/assets/fb371f1c-4bdc-4afa-8507-92251d063655)
+![Image 6](https://github.com/user-attachments/assets/c0dab2a0-dd7f-4cf8-b3c7-f815b1d2f8bc)
+![Image 7](https://github.com/user-attachments/assets/549ed0b2-b40d-49f0-8590-ad0df484f7fe)
+![Image 8](https://github.com/user-attachments/assets/02abafd8-8170-4e8c-92b4-a40d242294da)
+![Image 9](https://github.com/user-attachments/assets/08898aca-9638-4e75-a93f-5f1a53c05018)
+![Image 10](https://github.com/user-attachments/assets/949f9ecb-0ea9-4025-8209-a77c466da1fb)
 
 ## Project Overview
 
@@ -39,20 +48,20 @@ A full-stack movie discovery web app built with **Next.js**, **React**, and **Ty
 
 ## Features & Functionality
 
-| Feature                                 | Description                                                                                                                                  |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Home**                                | Hero slideshow (10 movies), Trending Now reel (30, random each visit), Now Playing grid (20, random), Top Rated grid (20, random). “See all” links to list pages. |
-| **Trending / Popular / Top / Upcoming / Now Playing** | Paginated list pages (20 cards per page, URL `?page=`); Trending has day/week tabs. |
-| **Discover**                            | Filter by genre, year, sort; paginated; filters preserved when changing page.                                                                |
-| **Genre**                               | Paginated movies by genre (`/movies/genre/[id]`).                                                                                            |
-| **Search**                              | Search by movie title via TMDB; redirects to `/search?q=...`.                                                                                |
-| **Movie Detail**                        | Poster (with bookmark), overview, cast, trailers, similar, recommendations, watch providers (US), reviews, collection. Cast / More Like This / Recommendations reels auto-slide and have left/right arrows. |
-| **Person Detail**                       | Bio and filmography (Acting, Director, Other Credits) as auto-sliding reels with left/right arrows.                                         |
-| **Collection Detail**                   | Movie series page with reel (auto-slide + arrows).                                                                                           |
-| **Bookmarks**                           | Bookmark icon on cards and movie detail poster; navbar bookmark icon with count; `/bookmarks` page; persisted in `localStorage`; toasts (add/remove/error). |
-| **Theme**                               | Light/dark mode; cookie + `initialDark` from server to avoid icon flicker.                                                                   |
-| **Navbar**                              | Sticky header; nav links (Home, Trending, Popular, Top Rated, Upcoming, Now Playing, Discover); bookmark icon (no “Bookmarks” text link); theme toggle. |
-| **Responsive UI**                       | Mobile-friendly layout and navigation.                                                                                                       |
+| Feature                                               | Description                                                                                                                                                                                                 |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Home**                                              | Hero slideshow (10 movies), Trending Now reel (30, random each visit), Now Playing grid (20, random), Top Rated grid (20, random). “See all” links to list pages.                                           |
+| **Trending / Popular / Top / Upcoming / Now Playing** | Paginated list pages (20 cards per page, URL `?page=`); Trending has day/week tabs.                                                                                                                         |
+| **Discover**                                          | Filter by genre, year, sort; paginated; filters preserved when changing page.                                                                                                                               |
+| **Genre**                                             | Paginated movies by genre (`/movies/genre/[id]`).                                                                                                                                                           |
+| **Search**                                            | Search by movie title via TMDB; redirects to `/search?q=...`.                                                                                                                                               |
+| **Movie Detail**                                      | Poster (with bookmark), overview, cast, trailers, similar, recommendations, watch providers (US), reviews, collection. Cast / More Like This / Recommendations reels auto-slide and have left/right arrows. |
+| **Person Detail**                                     | Bio and filmography (Acting, Director, Other Credits) as auto-sliding reels with left/right arrows.                                                                                                         |
+| **Collection Detail**                                 | Movie series page with reel (auto-slide + arrows).                                                                                                                                                          |
+| **Bookmarks**                                         | Bookmark icon on cards and movie detail poster; navbar bookmark icon with count; `/bookmarks` page; persisted in `localStorage`; toasts (add/remove/error).                                                 |
+| **Theme**                                             | Light/dark mode; cookie + `initialDark` from server to avoid icon flicker.                                                                                                                                  |
+| **Navbar**                                            | Sticky header; nav links (Home, Trending, Popular, Top Rated, Upcoming, Now Playing, Discover); bookmark icon (no “Bookmarks” text link); theme toggle.                                                     |
+| **Responsive UI**                                     | Mobile-friendly layout and navigation.                                                                                                                                                                      |
 
 ---
 
@@ -207,23 +216,23 @@ cp .env.example .env
 
 ## Routes & Pages
 
-| Route                  | Type   | Description                                                                 |
-| ---------------------- | ------ | --------------------------------------------------------------------------- |
-| `/`                    | Server | Home: hero (10), Trending reel (30), Now Playing (20), Top Rated (20).    |
-| `/movies/trending`     | Server | Trending list; `?page=`, `?window=day|week`; paginated.                      |
-| `/movies/popular`      | Server | Popular list; `?page=`; paginated.                                         |
-| `/movies/top`          | Server | Top rated; `?page=`; paginated.                                            |
-| `/movies/upcoming`     | Server | Upcoming; `?page=`; paginated.                                             |
-| `/movies/now-playing`  | Server | Now playing; `?page=`; paginated.                                          |
-| `/movies/discover`     | Server | Discover; `?genre`, `?year`, `?sort`, `?page=`; paginated.                 |
-| `/movies/genre/[id]`   | Server | By genre; `?page=`; paginated.                                             |
-| `/search`              | Client | Search by query.                                                            |
-| `/bookmarks`           | Server | Saved movies (client `BookmarkPage` from `BookmarkContext`).                |
-| `/movie/[id]`          | Server | Movie detail; reels (Cast, More Like This, Recommendations) with arrows.   |
-| `/person/[id]`         | Server | Person detail; reels (Acting, Director, Other Credits) with arrows.       |
-| `/collection/[id]`     | Server | Collection; reel with arrows.                                               |
-| `/api/discover`        | API    | GET; `genre`, `year`, `sort`.                                               |
-| `/api/genres`          | API    | GET; genre list.                                                           |
+| Route                 | Type   | Description                                                              |
+| --------------------- | ------ | ------------------------------------------------------------------------ | ----------------- |
+| `/`                   | Server | Home: hero (10), Trending reel (30), Now Playing (20), Top Rated (20).   |
+| `/movies/trending`    | Server | Trending list; `?page=`, `?window=day                                    | week`; paginated. |
+| `/movies/popular`     | Server | Popular list; `?page=`; paginated.                                       |
+| `/movies/top`         | Server | Top rated; `?page=`; paginated.                                          |
+| `/movies/upcoming`    | Server | Upcoming; `?page=`; paginated.                                           |
+| `/movies/now-playing` | Server | Now playing; `?page=`; paginated.                                        |
+| `/movies/discover`    | Server | Discover; `?genre`, `?year`, `?sort`, `?page=`; paginated.               |
+| `/movies/genre/[id]`  | Server | By genre; `?page=`; paginated.                                           |
+| `/search`             | Client | Search by query.                                                         |
+| `/bookmarks`          | Server | Saved movies (client `BookmarkPage` from `BookmarkContext`).             |
+| `/movie/[id]`         | Server | Movie detail; reels (Cast, More Like This, Recommendations) with arrows. |
+| `/person/[id]`        | Server | Person detail; reels (Acting, Director, Other Credits) with arrows.      |
+| `/collection/[id]`    | Server | Collection; reel with arrows.                                            |
+| `/api/discover`       | API    | GET; `genre`, `year`, `sort`.                                            |
+| `/api/genres`         | API    | GET; genre list.                                                         |
 
 Navigation uses Next.js `<Link>` and `useRouter`; the header is sticky and uses `usePathname()` for active state.
 
@@ -235,28 +244,28 @@ All TMDB calls live in **`lib/tmdb.ts`**. The API key is read from `TMDB_API_KEY
 
 ### Main functions
 
-| Function                              | TMDB endpoint (concept)           | Returns                              |
-| ------------------------------------- | --------------------------------- | ------------------------------------ |
-| `fetchMovies(path, query?)`           | Generic list (first page)         | `Movie[]`                            |
-| `fetchMoviesPage(path, page, query?)` | List with pagination              | `TmdbListResponse` (results, total_pages) |
-| `fetchMovieById(id)`                  | `GET /movie/{id}`                 | `MovieDetail \| null`                |
-| `fetchMovieCredits(id)`               | `GET /movie/{id}/credits`         | `MovieCredits \| null`               |
-| `fetchMovieVideos(id)`                | `GET /movie/{id}/videos`          | `Video[]` (YouTube trailers)         |
-| `fetchSimilarMovies(id, page?)`       | `GET /movie/{id}/similar`         | `Movie[]`                            |
-| `fetchSimilarMoviesPage(id, page)`    | Similar with pagination           | `TmdbListResponse`                    |
-| `fetchRecommendations(id, page?)`     | `GET /movie/{id}/recommendations` | `Movie[]`                            |
-| `fetchRecommendationsPage(id, page)`  | Recommendations with pagination   | `TmdbListResponse`                    |
-| `fetchWatchProviders(id)`             | `GET /movie/{id}/watch/providers` | `WatchProvidersResponse \| null`     |
-| `fetchReviews(id)`                    | `GET /movie/{id}/reviews`         | `ReviewsResponse \| null`            |
-| `fetchPersonById(id)`                 | `GET /person/{id}`                | `Person \| null`                     |
-| `fetchPersonMovieCredits(id)`         | `GET /person/{id}/movie_credits`   | `PersonMovieCreditsResponse \| null` |
-| `fetchCollectionById(id)`             | `GET /collection/{id}`            | `Collection \| null`                 |
-| `fetchTrendingMovies(day \| week)`    | `GET /trending/movie/{window}`    | `Movie[]`                            |
-| `fetchTrendingMoviesPage(window, page)` | Trending with pagination        | `TmdbListResponse`                    |
-| `fetchDiscoverMovies(params)`        | `GET /discover/movie`             | `Movie[]`                            |
-| `fetchDiscoverMoviesPage(params)`    | Discover with pagination          | `TmdbListResponse`                    |
-| `fetchGenres()`                       | `GET /genre/movie/list`           | `Genre[]`                            |
-| `enrichMoviesWithRuntime(movies)`     | Batch detail fetch                | `Movie[]` (with runtime)              |
+| Function                                | TMDB endpoint (concept)           | Returns                                   |
+| --------------------------------------- | --------------------------------- | ----------------------------------------- |
+| `fetchMovies(path, query?)`             | Generic list (first page)         | `Movie[]`                                 |
+| `fetchMoviesPage(path, page, query?)`   | List with pagination              | `TmdbListResponse` (results, total_pages) |
+| `fetchMovieById(id)`                    | `GET /movie/{id}`                 | `MovieDetail \| null`                     |
+| `fetchMovieCredits(id)`                 | `GET /movie/{id}/credits`         | `MovieCredits \| null`                    |
+| `fetchMovieVideos(id)`                  | `GET /movie/{id}/videos`          | `Video[]` (YouTube trailers)              |
+| `fetchSimilarMovies(id, page?)`         | `GET /movie/{id}/similar`         | `Movie[]`                                 |
+| `fetchSimilarMoviesPage(id, page)`      | Similar with pagination           | `TmdbListResponse`                        |
+| `fetchRecommendations(id, page?)`       | `GET /movie/{id}/recommendations` | `Movie[]`                                 |
+| `fetchRecommendationsPage(id, page)`    | Recommendations with pagination   | `TmdbListResponse`                        |
+| `fetchWatchProviders(id)`               | `GET /movie/{id}/watch/providers` | `WatchProvidersResponse \| null`          |
+| `fetchReviews(id)`                      | `GET /movie/{id}/reviews`         | `ReviewsResponse \| null`                 |
+| `fetchPersonById(id)`                   | `GET /person/{id}`                | `Person \| null`                          |
+| `fetchPersonMovieCredits(id)`           | `GET /person/{id}/movie_credits`  | `PersonMovieCreditsResponse \| null`      |
+| `fetchCollectionById(id)`               | `GET /collection/{id}`            | `Collection \| null`                      |
+| `fetchTrendingMovies(day \| week)`      | `GET /trending/movie/{window}`    | `Movie[]`                                 |
+| `fetchTrendingMoviesPage(window, page)` | Trending with pagination          | `TmdbListResponse`                        |
+| `fetchDiscoverMovies(params)`           | `GET /discover/movie`             | `Movie[]`                                 |
+| `fetchDiscoverMoviesPage(params)`       | Discover with pagination          | `TmdbListResponse`                        |
+| `fetchGenres()`                         | `GET /genre/movie/list`           | `Genre[]`                                 |
+| `enrichMoviesWithRuntime(movies)`       | Batch detail fetch                | `Movie[]` (with runtime)                  |
 
 ### Example: fetching and using data (server component)
 
