@@ -23,6 +23,8 @@ import { Badge } from "@/components/ui/Badge";
 import { CastCard } from "@/components/ui/CastCard";
 import { VideoCard } from "@/components/ui/VideoCard";
 import { SimilarMovieCard } from "@/components/ui/SimilarMovieCard";
+import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { ReelWithArrows } from "@/components/ui/ReelWithArrows";
 import { useTitle } from "@/hooks/useTitle";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
@@ -148,8 +150,21 @@ export function MovieDetailPage({
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
-          className="max-w-sm flex-shrink-0"
+          className="max-w-sm flex-shrink-0 relative"
         >
+          <BookmarkButton
+            movie={{
+              id: movie.id,
+              original_title: movie.original_title ?? movie.title,
+              poster_path: movie.poster_path,
+              release_date: movie.release_date,
+              overview: movie.overview,
+              backdrop_path: movie.backdrop_path,
+              vote_average: movie.vote_average,
+              genre_ids: movie.genre_ids ?? movie.genres?.map((g) => g.id),
+              runtime: movie.runtime,
+            }}
+          />
           <Image
             src={image}
             alt={movie.title}
@@ -300,10 +315,10 @@ export function MovieDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             {collection.name} Collection
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {collection.parts.map((part, i) => (
+          <ReelWithArrows>
+            {[...collection.parts, ...collection.parts].map((part, i) => (
               <SimilarMovieCard
-                key={part.id}
+                key={`${part.id}-${i}`}
                 movie={{
                   id: part.id,
                   original_title: part.title ?? part.original_title ?? "",
@@ -313,10 +328,10 @@ export function MovieDetailPage({
                   vote_average: part.vote_average,
                   release_date: part.release_date,
                 }}
-                index={i}
+                index={i % collection.parts.length}
               />
             ))}
-          </div>
+          </ReelWithArrows>
         </motion.div>
       )}
 
@@ -348,11 +363,11 @@ export function MovieDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             Cast
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin">
-            {topCast.map((c, i) => (
-              <CastCard key={c.id} cast={c} index={i} />
+          <ReelWithArrows>
+            {[...topCast, ...topCast].map((c, i) => (
+              <CastCard key={`cast-${c.id}-${i}`} cast={c} index={i % topCast.length} />
             ))}
-          </div>
+          </ReelWithArrows>
         </motion.div>
       )}
 
@@ -366,11 +381,14 @@ export function MovieDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             More Like This
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {similarMovies.slice(0, 12).map((m, i) => (
-              <SimilarMovieCard key={m.id} movie={m} index={i} />
-            ))}
-          </div>
+          <ReelWithArrows>
+            {(() => {
+              const list = similarMovies.slice(0, 30);
+              return [...list, ...list].map((m, i) => (
+                <SimilarMovieCard key={`similar-${m.id}-${i}`} movie={m} index={i % list.length} />
+              ));
+            })()}
+          </ReelWithArrows>
         </motion.div>
       )}
 
@@ -384,11 +402,14 @@ export function MovieDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             Recommendations
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {recommendations.slice(0, 12).map((m, i) => (
-              <SimilarMovieCard key={m.id} movie={m} index={i} />
-            ))}
-          </div>
+          <ReelWithArrows>
+            {(() => {
+              const list = recommendations.slice(0, 30);
+              return [...list, ...list].map((m, i) => (
+                <SimilarMovieCard key={`rec-${m.id}-${i}`} movie={m} index={i % list.length} />
+              ));
+            })()}
+          </ReelWithArrows>
         </motion.div>
       )}
 

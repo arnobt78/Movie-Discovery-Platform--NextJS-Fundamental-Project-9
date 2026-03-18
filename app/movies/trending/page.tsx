@@ -1,26 +1,34 @@
 /**
- * Route: /movies/trending
- * Fetches trending/day and trending/week, enriches with runtime, renders two tabs.
+ * Route: /movies/trending — paginated list with day/week window; one window per request.
  */
-import { fetchTrendingMovies, enrichMoviesWithRuntime } from "@/lib/tmdb";
+import { fetchTrendingMoviesPage, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { TrendingPage } from "@/components/pages/TrendingPage";
+
+interface PageProps {
+  searchParams: Promise<{ page?: string; window?: string }>;
+}
 
 export const metadata = {
   title: "Trending",
 };
 
-export default async function TrendingRoute() {
-  const [dayRaw, weekRaw] = await Promise.all([
-    fetchTrendingMovies("day"),
-    fetchTrendingMovies("week"),
-  ]);
+export default async function TrendingRoute({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const window = params.window === "week" ? "week" : "day";
+  const currentPage = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
 
-  const [dayMovies, weekMovies] = await Promise.all([
-    enrichMoviesWithRuntime(dayRaw),
-    enrichMoviesWithRuntime(weekRaw),
-  ]);
+  const data = await fetchTrendingMoviesPage(window, currentPage);
+  const movies = await enrichMoviesWithRuntime(data.results ?? []);
+  const totalPages = Math.max(1, data.total_pages ?? 1);
 
   return (
-    <TrendingPage dayMovies={dayMovies} weekMovies={weekMovies} />
+    <TrendingPage
+      movies={movies}
+      window={window}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      basePath="/movies/trending"
+      preserveQuery={`window=${window}`}
+    />
   );
 }

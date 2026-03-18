@@ -1,22 +1,33 @@
 "use client";
 
 /**
- * TrendingPage - trending movies with day/week toggle.
+ * TrendingPage - trending movies with day/week tabs and pagination.
  */
-import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";
 import { MovieCard } from "@/components/ui/MovieCard";
-import { RippleButton } from "@/components/ui/RippleButton";
+import { Pagination } from "@/components/ui/Pagination";
+import { useTitle } from "@/hooks/useTitle";
 
 interface TrendingPageProps {
-  dayMovies: Movie[];
-  weekMovies: Movie[];
+  movies: Movie[];
+  window: "day" | "week";
+  currentPage: number;
+  totalPages: number;
+  basePath: string;
+  preserveQuery: string;
 }
 
-export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
-  const [window, setWindow] = useState<"day" | "week">("day");
-  const movies = window === "day" ? dayMovies : weekMovies; // Both lists pre-fetched on server.
+export function TrendingPage({
+  movies,
+  window,
+  currentPage,
+  totalPages,
+  basePath,
+  preserveQuery,
+}: TrendingPageProps) {
+  useTitle("Trending");
 
   return (
     <section className="max-w-9xl mx-auto py-7">
@@ -29,9 +40,8 @@ export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
           Trending Movies
         </h1>
         <div className="flex gap-2">
-          <RippleButton
-            type="button"
-            onClick={() => setWindow("day")}
+          <Link
+            href="/movies/trending?window=day&page=1"
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               window === "day"
                 ? "bg-blue-600 text-white"
@@ -39,10 +49,9 @@ export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
             }`}
           >
             Today
-          </RippleButton>
-          <RippleButton
-            type="button"
-            onClick={() => setWindow("week")}
+          </Link>
+          <Link
+            href="/movies/trending?window=week&page=1"
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               window === "week"
                 ? "bg-blue-600 text-white"
@@ -50,11 +59,11 @@ export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
             }`}
           >
             This Week
-          </RippleButton>
+          </Link>
         </div>
       </motion.div>
       <motion.div
-        key={window}
+        key={`${window}-${currentPage}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -64,6 +73,14 @@ export function TrendingPage({ dayMovies, weekMovies }: TrendingPageProps) {
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}
       </motion.div>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath={basePath}
+          preserveQuery={preserveQuery}
+        />
+      )}
     </section>
   );
 }

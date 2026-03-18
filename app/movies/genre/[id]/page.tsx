@@ -1,12 +1,13 @@
 /**
- * Route: /movies/genre/[id] — movies filtered by genre; metadata uses genre name.
+ * Route: /movies/genre/[id] — paginated movies filtered by genre.
  */
 import { notFound } from "next/navigation";
-import { fetchDiscoverMovies, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
+import { fetchDiscoverMoviesPage, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { GenrePage } from "@/components/pages/GenrePage";
 
 interface GenreRouteProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }
 
 export async function generateMetadata({ params }: GenreRouteProps) {
@@ -18,18 +19,30 @@ export async function generateMetadata({ params }: GenreRouteProps) {
   };
 }
 
-export default async function GenreRoute({ params }: GenreRouteProps) {
+export default async function GenreRoute({ params, searchParams }: GenreRouteProps) {
   const { id } = await params;
+  const { page } = await searchParams;
   const genreId = Number(id);
-  const [moviesRaw, genres] = await Promise.all([
-    fetchDiscoverMovies({ genre_id: genreId }),
+  const currentPage = Math.max(1, parseInt(page ?? "1", 10) || 1);
+
+  const [data, genres] = await Promise.all([
+    fetchDiscoverMoviesPage({ genre_id: genreId, page: currentPage }),
     fetchGenres(),
   ]);
 
   const genre = genres.find((g) => g.id === genreId);
   if (!genre) notFound();
 
-  const movies = await enrichMoviesWithRuntime(moviesRaw);
+  const movies = await enrichMoviesWithRuntime(data.results ?? []);
+  const totalPages = Math.max(1, data.total_pages ?? 1);
 
-  return <GenrePage movies={movies} genreName={genre.name} />;
+  return (
+    <GenrePage
+      movies={movies}
+      genreName={genre.name}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      basePath={`/movies/genre/${id}`}
+    />
+  );
 }

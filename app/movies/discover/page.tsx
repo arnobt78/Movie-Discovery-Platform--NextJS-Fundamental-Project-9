@@ -1,12 +1,11 @@
 /**
- * Route: /movies/discover — filter by genre, year, sort via URL searchParams.
- * SSR fetches discover + genres; client DiscoverPage handles filter UI and refetch.
+ * Route: /movies/discover — filter by genre, year, sort; paginated via URL page.
  */
-import { fetchDiscoverMovies, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
+import { fetchDiscoverMoviesPage, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
 import { DiscoverPage } from "@/components/pages/DiscoverPage";
 
 interface DiscoverPageProps {
-  searchParams: Promise<{ genre?: string; year?: string; sort?: string }>;
+  searchParams: Promise<{ genre?: string; year?: string; sort?: string; page?: string }>;
 }
 
 export const metadata = {
@@ -18,18 +17,34 @@ export default async function DiscoverRoute({ searchParams }: DiscoverPageProps)
   const genreId = params.genre ? Number(params.genre) : undefined;
   const year = params.year ? Number(params.year) : undefined;
   const sort = params.sort ?? "popularity.desc";
+  const currentPage = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
 
-  // Initial load uses URL params; filter changes trigger client-side /api/discover.
-  const [moviesRaw, genres] = await Promise.all([
-    fetchDiscoverMovies({
+  const [data, genres] = await Promise.all([
+    fetchDiscoverMoviesPage({
       genre_id: genreId,
       primary_release_year: year,
       sort_by: sort,
+      page: currentPage,
     }),
     fetchGenres(),
   ]);
 
-  const movies = await enrichMoviesWithRuntime(moviesRaw);
+  const movies = await enrichMoviesWithRuntime(data.results ?? []);
+  const totalPages = Math.max(1, data.total_pages ?? 1);
 
-  return <DiscoverPage initialMovies={movies} genres={genres} />;
+  const preserveQuery = new URLSearchParams();
+  if (genreId) preserveQuery.set("genre", String(genreId));
+  if (year) preserveQuery.set("year", String(year));
+  preserveQuery.set("sort", sort);
+
+  return (
+    <DiscoverPage
+      initialMovies={movies}
+      genres={genres}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      basePath="/movies/discover"
+      preserveQuery={preserveQuery.toString()}
+    />
+  );
 }

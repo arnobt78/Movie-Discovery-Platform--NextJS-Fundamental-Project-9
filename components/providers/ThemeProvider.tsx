@@ -2,7 +2,7 @@
 
 /**
  * ThemeProvider - manages dark mode via class on document.documentElement.
- * Persists preference in localStorage.
+ * Persists preference in localStorage. initialDark from layout (cookie) avoids icon flicker on load.
  */
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -13,16 +13,22 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [darkMode, setDarkMode] = useState(false);
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  /** Server-known theme from cookie so first paint and icon match (no flicker). */
+  initialDark?: boolean;
+}
+
+export function ThemeProvider({ children, initialDark = false }: ThemeProviderProps) {
+  const [darkMode, setDarkMode] = useState(initialDark);
   const [mounted, setMounted] = useState(false);
 
-  // Hydrate from localStorage/cookie on mount to avoid flash.
+  // Sync from DOM/localStorage on mount in case script or another tab changed theme.
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem("darkMode");
     const value = stored !== null ? JSON.parse(stored) : document.documentElement.classList.contains("dark");
-    setDarkMode(value);
+    setDarkMode((prev) => (value === prev ? prev : value));
   }, []);
 
   // Persist to localStorage and cookie; root layout reads cookie for SSR.

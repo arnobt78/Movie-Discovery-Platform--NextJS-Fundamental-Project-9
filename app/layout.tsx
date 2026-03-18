@@ -23,7 +23,9 @@ const dmSans = DM_Sans({
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { GenresProvider } from "@/components/providers/GenresProvider";
+import { BookmarkProvider } from "@/context/BookmarkContext";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { Toaster } from "sonner";
 
 const SITE_URL = "https://latest-movie.vercel.app";
 
@@ -124,14 +126,17 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body className="min-h-screen bg-white dark:bg-darkbg antialiased font-sans" suppressHydrationWarning>
-        <ThemeProvider>
+        <ThemeProvider initialDark={isDark}>
           <GenresProvider>
+          <BookmarkProvider>
           <div className="max-w-9xl mx-auto w-full px-4 sm:px-6 min-h-[90vh] flex flex-col">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
           <ScrollToTop />
+          <Toaster position="bottom-right" />
+          </BookmarkProvider>
           </GenresProvider>
         </ThemeProvider>
       </body>

@@ -8,8 +8,8 @@ import {
   fetchMovieById,
   fetchMovieCredits,
   fetchMovieVideos,
-  fetchSimilarMovies,
-  fetchRecommendations,
+  fetchSimilarMoviesPage,
+  fetchRecommendationsPage,
   fetchWatchProviders,
   fetchReviews,
   fetchCollectionById,
@@ -37,20 +37,24 @@ export default async function MovieRoute({ params }: MoviePageProps) {
     notFound();
   }
 
-  // Fetch all related data in parallel; collection only when movie is part of a series.
+  // Fetch all related data in parallel; similar and recommendations use 2 pages for 30 items each.
   const [
     credits,
     videos,
-    similar,
-    recommendations,
+    similarPage1,
+    similarPage2,
+    recPage1,
+    recPage2,
     watchProviders,
     reviews,
     collection,
   ] = await Promise.all([
     fetchMovieCredits(id),
     fetchMovieVideos(id),
-    fetchSimilarMovies(id),
-    fetchRecommendations(id),
+    fetchSimilarMoviesPage(id, 1),
+    fetchSimilarMoviesPage(id, 2),
+    fetchRecommendationsPage(id, 1),
+    fetchRecommendationsPage(id, 2),
     fetchWatchProviders(id),
     fetchReviews(id),
     movie.belongs_to_collection
@@ -58,13 +62,16 @@ export default async function MovieRoute({ params }: MoviePageProps) {
       : Promise.resolve(null),
   ]);
 
+  const similar = [...(similarPage1.results ?? []), ...(similarPage2.results ?? [])].slice(0, 30);
+  const recommendations = [...(recPage1.results ?? []), ...(recPage2.results ?? [])].slice(0, 30);
+
   return (
     <MovieDetailPage
       movie={movie}
       credits={credits}
       videos={videos}
       similarMovies={similar}
-      recommendations={recommendations ?? []}
+      recommendations={recommendations}
       watchProviders={watchProviders}
       reviews={reviews?.results ?? []}
       collection={collection}

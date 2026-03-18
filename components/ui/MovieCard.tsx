@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { useGenres } from "@/components/providers/GenresProvider";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
@@ -58,16 +59,35 @@ export function MovieCard({ movie, index = 0 }: MovieCardProps) {
       className="w-full h-full"
     >
       <Card className="h-full max-w-sm overflow-hidden flex flex-col">
-        <Link href={`/movie/${id}`} className="flex-shrink-0">
-          <div className="relative w-full aspect-[2/3] bg-gray-200 dark:bg-gray-700">
-            <Image
-              src={image}
-              alt={original_title}
-              fill
-              className="object-cover rounded-t-lg"
-              sizes="(max-width: 640px) 100vw, 384px"
-              unoptimized={!poster_path}
+        <Link href={`/movie/${id}`} className="flex-shrink-0 block relative">
+          <div className="relative w-full aspect-[2/3] bg-gray-200 dark:bg-gray-700 overflow-hidden rounded-t-lg">
+            <BookmarkButton
+              movie={{
+                id,
+                original_title,
+                poster_path,
+                release_date,
+                overview,
+                backdrop_path: movie.backdrop_path,
+                vote_average,
+                genre_ids,
+                runtime,
+              }}
             />
+            <motion.div
+              className="relative w-full h-full"
+              whileHover={{ scale: 1.08 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <Image
+                src={image}
+                alt={original_title}
+                fill
+                className="object-cover rounded-t-lg"
+                sizes="(max-width: 640px) 100vw, 384px"
+                unoptimized={!poster_path}
+              />
+            </motion.div>
           </div>
         </Link>
         <CardHeader className="flex-1 flex flex-col min-h-0">

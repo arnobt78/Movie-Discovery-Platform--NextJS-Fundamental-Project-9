@@ -13,15 +13,27 @@ import { MovieCard } from "@/components/ui/MovieCard";
 import { GenreFilter } from "@/components/ui/GenreFilter";
 import { YearFilter } from "@/components/ui/YearFilter";
 import { SortSelect } from "@/components/ui/SortSelect";
+import { Pagination } from "@/components/ui/Pagination";
 
 interface DiscoverPageProps {
   initialMovies: Movie[];
   genres: Genre[];
+  currentPage?: number;
+  totalPages?: number;
+  basePath?: string;
+  preserveQuery?: string;
 }
 
 const DEFAULT_SORT = "popularity.desc";
 
-export function DiscoverPage({ initialMovies, genres }: DiscoverPageProps) {
+export function DiscoverPage({
+  initialMovies,
+  genres,
+  currentPage = 1,
+  totalPages,
+  basePath = "/movies/discover",
+  preserveQuery,
+}: DiscoverPageProps) {
   const router = useRouter();
   const { genreId, year, sort } = useDiscoverParams();
 
@@ -105,6 +117,14 @@ export function DiscoverPage({ initialMovies, genres }: DiscoverPageProps) {
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}
       </motion.div>
+      {totalPages != null && totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath={basePath}
+          preserveQuery={preserveQuery}
+        />
+      )}
     </section>
   );
 }

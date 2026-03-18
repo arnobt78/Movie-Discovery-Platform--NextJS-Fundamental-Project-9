@@ -8,8 +8,9 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { useBookmarks } from "@/context/BookmarkContext";
 import { RippleButton } from "@/components/ui/RippleButton";
-import { Clapperboard } from "lucide-react";
+import { Clapperboard, Bookmark } from "lucide-react";
 
 const SearchIcon = ({ className }: { className?: string }) => (
   <svg
@@ -77,6 +78,7 @@ const navLinks = [
   { href: "/movies/popular", label: "Popular" },
   { href: "/movies/top", label: "Top Rated" },
   { href: "/movies/upcoming", label: "Upcoming" },
+  { href: "/movies/now-playing", label: "Now Playing" },
   { href: "/movies/discover", label: "Discover" },
 ];
 
@@ -84,6 +86,7 @@ export function Header() {
   // Mobile: collapse state for nav + search drawer.
   const [hidden, setHidden] = useState(true);
   const { darkMode, setDarkMode } = useTheme();
+  const { count } = useBookmarks();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -115,7 +118,7 @@ export function Header() {
   );
 
   return (
-    <header>
+    <header className="sticky top-0 z-50 w-full bg-white dark:bg-darkbg">
       <nav className="border-b-2 border-gray-200 px-2 sm:px-0 py-2 dark:border-b-1 dark:border-gray-700">
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/" className="flex items-center">
@@ -133,6 +136,18 @@ export function Header() {
             >
               {darkMode ? <SunIcon /> : <MoonIcon />}
             </RippleButton>
+            <Link
+              href="/bookmarks"
+              className="relative flex items-center justify-center p-2 mr-2 text-xs font-medium text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+              aria-label="Bookmarks"
+            >
+              <Bookmark className="w-4 h-4" strokeWidth={2} />
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-sky-500 text-white text-xs font-semibold">
+                  {count > 99 ? "99+" : count}
+                </span>
+              )}
+            </Link>
             <RippleButton
               type="button"
               onClick={() => setHidden(!hidden)}

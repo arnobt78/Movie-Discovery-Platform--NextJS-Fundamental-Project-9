@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * TrendingSection - horizontal scroll of first 10 trending movies + "See all" to /movies/trending.
+ * TrendingSection - auto-sliding film reel of trending movies; no scrollbar.
  */
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -12,7 +12,12 @@ interface TrendingSectionProps {
   movies: Movie[];
 }
 
+const REEL_DURATION = 55;
+
 export function TrendingSection({ movies }: TrendingSectionProps) {
+  const list = movies.slice(0, 30);
+  const duplicated = [...list, ...list];
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -31,10 +36,24 @@ export function TrendingSection({ movies }: TrendingSectionProps) {
           See all
         </Link>
       </div>
-      <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin">
-        {movies.slice(0, 10).map((movie, i) => (
-          <SimilarMovieCard key={movie.id} movie={movie} index={i} />
-        ))}
+      <div className="overflow-hidden">
+        <motion.div
+          className="flex gap-4 w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            duration: REEL_DURATION,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          {duplicated.map((movie, i) => (
+            <SimilarMovieCard
+              key={`${movie.id}-${i}`}
+              movie={movie}
+              index={i % list.length}
+            />
+          ))}
+        </motion.div>
       </div>
     </motion.section>
   );

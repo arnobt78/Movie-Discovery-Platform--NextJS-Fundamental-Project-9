@@ -13,6 +13,8 @@ import type {
   PersonMovieCredit,
 } from "@/types/movie";
 import { useTitle } from "@/hooks/useTitle";
+import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { ReelWithArrows } from "@/components/ui/ReelWithArrows";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const FALLBACK_IMAGE = "/images/backup.png";
@@ -35,7 +37,7 @@ export function PersonDetailPage({
   const cast = movieCredits?.cast ?? [];
   const crew = movieCredits?.crew ?? [];
   const directors = crew.filter((c) => c.job === "Director");
-  const otherCrew = crew.filter((c) => c.job !== "Director").slice(0, 20);
+  const otherCrew = crew.filter((c) => c.job !== "Director");
 
   return (
     <section className="w-full py-5">
@@ -115,15 +117,15 @@ export function PersonDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             Acting
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {cast.slice(0, 20).map((credit, i) => (
+          <ReelWithArrows>
+            {[...cast, ...cast].map((credit, i) => (
               <PersonMovieCard
-                key={credit.credit_id ?? `${credit.id}-${i}`}
+                key={`acting-${credit.credit_id ?? credit.id}-${i}`}
                 credit={credit}
-                index={i}
+                index={i % cast.length}
               />
             ))}
-          </div>
+          </ReelWithArrows>
         </motion.div>
       )}
 
@@ -137,15 +139,15 @@ export function PersonDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             Director
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {directors.map((credit, i) => (
+          <ReelWithArrows>
+            {[...directors, ...directors].map((credit, i) => (
               <PersonMovieCard
-                key={credit.credit_id ?? `${credit.id}-dir-${i}`}
+                key={`dir-${credit.credit_id ?? credit.id}-${i}`}
                 credit={credit}
-                index={i}
+                index={i % directors.length}
               />
             ))}
-          </div>
+          </ReelWithArrows>
         </motion.div>
       )}
 
@@ -159,15 +161,15 @@ export function PersonDetailPage({
           <h2 className="text-2xl font-bold font-display mb-4 text-gray-900 dark:text-white">
             Other Credits
           </h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {otherCrew.map((credit, i) => (
+          <ReelWithArrows>
+            {[...otherCrew, ...otherCrew].map((credit, i) => (
               <PersonMovieCard
-                key={credit.credit_id ?? `${credit.id}-${credit.job}-${i}`}
+                key={`crew-${credit.credit_id ?? credit.id}-${credit.job}-${i}`}
                 credit={credit}
-                index={i}
+                index={i % otherCrew.length}
               />
             ))}
-          </div>
+          </ReelWithArrows>
         </motion.div>
       )}
     </section>
@@ -194,16 +196,33 @@ function PersonMovieCard({
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className="flex-shrink-0 w-32 sm:w-36"
     >
-      <Link href={`/movie/${credit.id}`}>
-        <div className="rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-[2/3] hover:ring-2 hover:ring-blue-500 transition-all">
-          <Image
-            src={image}
-            alt={title}
-            width={144}
-            height={216}
-            className="object-cover w-full h-full"
-            unoptimized={!credit.poster_path}
+      <Link href={`/movie/${credit.id}`} className="relative block">
+        <div className="rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-[2/3] hover:ring-2 hover:ring-blue-500 transition-all relative">
+          <BookmarkButton
+            movie={{
+              id: credit.id,
+              original_title: credit.original_title ?? credit.title ?? "Unknown",
+              poster_path: credit.poster_path,
+              release_date: credit.release_date,
+              overview: credit.overview,
+              backdrop_path: credit.backdrop_path,
+              vote_average: credit.vote_average,
+            }}
           />
+          <motion.div
+            className="relative w-full h-full"
+            whileHover={{ scale: 1.08 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <Image
+              src={image}
+              alt={title}
+              width={144}
+              height={216}
+              className="object-cover w-full h-full"
+              unoptimized={!credit.poster_path}
+            />
+          </motion.div>
         </div>
         <p className="mt-1 text-xs font-medium text-gray-900 dark:text-white truncate">
           {title}

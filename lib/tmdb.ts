@@ -34,15 +34,30 @@ export async function fetchMovies(
   apiPath: string,
   query?: string
 ): Promise<Movie[]> {
+  const data = await fetchMoviesPage(apiPath, 1, query);
+  return data.results ?? [];
+}
+
+/** Paginated list fetcher; returns full TMDB response for pagination UI. */
+export async function fetchMoviesPage(
+  apiPath: string,
+  page: number = 1,
+  query?: string
+): Promise<TmdbListResponse> {
   const key = getApiKey();
-  if (!key) return [];
-  const params = new URLSearchParams({ api_key: key });
+  if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+  const params = new URLSearchParams({ api_key: key, page: String(page) });
   if (query) params.set("query", query);
   const url = `${API_BASE}/${apiPath}?${params.toString()}`;
   const res = await fetch(url);
-  if (!res.ok) return [];
+  if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
-  return json.results ?? [];
+  return {
+    results: json.results ?? [],
+    page: json.page ?? page,
+    total_pages: json.total_pages ?? 0,
+    total_results: json.total_results ?? 0,
+  };
 }
 
 export async function fetchMovieById(id: string): Promise<MovieDetail | null> {
@@ -78,24 +93,34 @@ export async function fetchMovieVideos(id: string): Promise<Video[]> {
   return trailers;
 }
 
-export async function fetchSimilarMovies(id: string): Promise<Movie[]> {
-  const key = getApiKey();
-  if (!key) return [];
-  const url = `${API_BASE}/movie/${id}/similar?api_key=${key}`;
-  const res = await fetch(url);
-  if (!res.ok) return [];
-  const json: TmdbListResponse = await res.json();
-  return json.results ?? [];
+export async function fetchSimilarMovies(id: string, page: number = 1): Promise<Movie[]> {
+  const data = await fetchSimilarMoviesPage(id, page);
+  return data.results ?? [];
 }
 
-export async function fetchRecommendations(id: string): Promise<Movie[]> {
+export async function fetchSimilarMoviesPage(id: string, page: number = 1): Promise<TmdbListResponse> {
   const key = getApiKey();
-  if (!key) return [];
-  const url = `${API_BASE}/movie/${id}/recommendations?api_key=${key}`;
+  if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+  const url = `${API_BASE}/movie/${id}/similar?api_key=${key}&page=${page}`;
   const res = await fetch(url);
-  if (!res.ok) return [];
+  if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
-  return json.results ?? [];
+  return { results: json.results ?? [], page: json.page ?? page, total_pages: json.total_pages ?? 0, total_results: json.total_results ?? 0 };
+}
+
+export async function fetchRecommendations(id: string, page: number = 1): Promise<Movie[]> {
+  const data = await fetchRecommendationsPage(id, page);
+  return data.results ?? [];
+}
+
+export async function fetchRecommendationsPage(id: string, page: number = 1): Promise<TmdbListResponse> {
+  const key = getApiKey();
+  if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+  const url = `${API_BASE}/movie/${id}/recommendations?api_key=${key}&page=${page}`;
+  const res = await fetch(url);
+  if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+  const json: TmdbListResponse = await res.json();
+  return { results: json.results ?? [], page: json.page ?? page, total_pages: json.total_pages ?? 0, total_results: json.total_results ?? 0 };
 }
 
 export async function fetchWatchProviders(id: string): Promise<WatchProvidersResponse | null> {
@@ -148,31 +173,58 @@ export async function fetchCollectionById(id: string): Promise<Collection | null
 export async function fetchTrendingMovies(
   timeWindow: "day" | "week"
 ): Promise<Movie[]> {
+  const data = await fetchTrendingMoviesPage(timeWindow, 1);
+  return data.results ?? [];
+}
+
+/** Paginated trending; for list page with pagination. */
+export async function fetchTrendingMoviesPage(
+  timeWindow: "day" | "week",
+  page: number = 1
+): Promise<TmdbListResponse> {
   const key = getApiKey();
-  if (!key) return [];
-  const url = `${API_BASE}/trending/movie/${timeWindow}?api_key=${key}`;
+  if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+  const url = `${API_BASE}/trending/movie/${timeWindow}?api_key=${key}&page=${page}`;
   const res = await fetch(url);
-  if (!res.ok) return [];
+  if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
-  return json.results ?? [];
+  return {
+    results: json.results ?? [],
+    page: json.page ?? page,
+    total_pages: json.total_pages ?? 0,
+    total_results: json.total_results ?? 0,
+  };
 }
 
 export async function fetchDiscoverMovies(
   params: TmdbDiscoverParams
 ): Promise<Movie[]> {
+  const data = await fetchDiscoverMoviesPage(params);
+  return data.results ?? [];
+}
+
+/** Paginated discover; returns full response for pagination. */
+export async function fetchDiscoverMoviesPage(
+  params: TmdbDiscoverParams
+): Promise<TmdbListResponse> {
   const key = getApiKey();
-  if (!key) return [];
+  if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const searchParams = new URLSearchParams({ api_key: key });
   if (params.genre_id != null) searchParams.set("with_genres", String(params.genre_id));
   if (params.primary_release_year != null)
     searchParams.set("primary_release_year", String(params.primary_release_year));
   if (params.sort_by) searchParams.set("sort_by", params.sort_by);
-  if (params.page != null) searchParams.set("page", String(params.page));
+  searchParams.set("page", String(params.page ?? 1));
   const url = `${API_BASE}/discover/movie?${searchParams.toString()}`;
   const res = await fetch(url);
-  if (!res.ok) return [];
+  if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
-  return json.results ?? [];
+  return {
+    results: json.results ?? [],
+    page: json.page ?? params.page ?? 1,
+    total_pages: json.total_pages ?? 0,
+    total_results: json.total_results ?? 0,
+  };
 }
 
 export async function fetchGenres(): Promise<Genre[]> {
