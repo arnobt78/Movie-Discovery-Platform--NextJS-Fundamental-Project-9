@@ -4,6 +4,8 @@
 import { fetchMoviesPage } from "@/lib/tmdb";
 import { MovieListPage } from "@/components/pages/MovieListPage";
 
+export const revalidate = 600;
+
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
 }

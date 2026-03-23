@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { fetchDiscoverMoviesPage, fetchGenres } from "@/lib/tmdb";
 import { GenrePage } from "@/components/pages/GenrePage";
 
+export const revalidate = 600;
+
 interface GenreRouteProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ page?: string }>;

@@ -31,6 +31,7 @@ export function TrendingSection({ movies }: TrendingSectionProps) {
         </h2>
         <Link
           href="/movies/trending"
+          prefetch={false}
           className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
         >
           See all

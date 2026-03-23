@@ -26,6 +26,7 @@ export function NowPlayingSection({ movies }: NowPlayingSectionProps) {
         </h2>
         <Link
           href="/movies/now-playing"
+          prefetch={false}
           className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
         >
           See all

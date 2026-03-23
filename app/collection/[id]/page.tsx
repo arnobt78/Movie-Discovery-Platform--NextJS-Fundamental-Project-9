@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { fetchCollectionById } from "@/lib/tmdb";
 import { CollectionDetailPage } from "@/components/pages/CollectionDetailPage";
 
+export const revalidate = 600;
+
 interface CollectionPageProps {
   params: Promise<{ id: string }>;
 }

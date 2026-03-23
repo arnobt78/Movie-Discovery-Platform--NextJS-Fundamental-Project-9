@@ -4,6 +4,8 @@
 import { fetchTrendingMoviesPage } from "@/lib/tmdb";
 import { TrendingPage } from "@/components/pages/TrendingPage";
 
+export const revalidate = 600;
+
 interface PageProps {
   searchParams: Promise<{ page?: string; window?: string }>;
 }

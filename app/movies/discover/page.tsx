@@ -4,6 +4,8 @@
 import { fetchDiscoverMoviesPage, fetchGenres } from "@/lib/tmdb";
 import { DiscoverPage } from "@/components/pages/DiscoverPage";
 
+export const revalidate = 600;
+
 interface DiscoverPageProps {
   searchParams: Promise<{ genre?: string; year?: string; sort?: string; page?: string }>;
 }
