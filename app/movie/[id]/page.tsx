@@ -16,6 +16,9 @@ import {
 } from "@/lib/tmdb";
 import { MovieDetailPage } from "@/components/pages/MovieDetailPage";
 
+export const runtime = "nodejs";
+export const revalidate = 600;
+
 interface MoviePageProps {
   params: Promise<{ id: string }>;
 }

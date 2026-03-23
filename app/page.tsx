@@ -14,6 +14,9 @@ import {
   TopRatedPreviewSection,
 } from "@/components/sections";
 
+export const runtime = "nodejs";
+export const revalidate = 600;
+
 export default async function HomePage() {
   const [trendingPage1, nowPlayingRaw, topRatedRaw] = await Promise.all([
     fetchTrendingMoviesPage("day", 1),

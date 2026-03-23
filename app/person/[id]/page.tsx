@@ -9,6 +9,9 @@ import {
 } from "@/lib/tmdb";
 import { PersonDetailPage } from "@/components/pages/PersonDetailPage";
 
+export const runtime = "nodejs";
+export const revalidate = 600;
+
 interface PersonPageProps {
   params: Promise<{ id: string }>;
 }
