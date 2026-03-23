@@ -5,9 +5,9 @@
  */
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Movie } from "@/types/movie";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/original";
 const FALLBACK = "/images/backup.png";
@@ -50,7 +50,7 @@ export function HeroSection({ movies }: HeroSectionProps) {
           className="absolute inset-0"
         >
           {backdrop && (
-            <Image
+            <SafeImage
               src={backdrop}
               alt=""
               fill
@@ -73,7 +73,7 @@ export function HeroSection({ movies }: HeroSectionProps) {
               transition={{ duration: 0.4, ease: "easeOut" }}
               className="hidden sm:block flex-shrink-0 w-24 aspect-[2/3] rounded-lg overflow-hidden shadow-xl"
             >
-              <Image
+              <SafeImage
                 src={poster}
                 alt={movie.original_title}
                 width={96}
@@ -115,6 +115,7 @@ export function HeroSection({ movies }: HeroSectionProps) {
             >
               <Link
                 href={`/movie/${movie.id}`}
+                prefetch={false}
                 className="inline-block mt-4 px-6 py-2.5 bg-sky-900 hover:bg-sky-800 text-white font-medium rounded-lg transition-colors"
               >
                 View Details

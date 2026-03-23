@@ -6,7 +6,6 @@
  * cast (links to /person/[id]), trailers, similar, recommendations, watch providers,
  * reviews, and collection section when applicable.
  */
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type {
@@ -26,6 +25,7 @@ import { SimilarMovieCard } from "@/components/ui/SimilarMovieCard";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { ReelWithArrows } from "@/components/ui/ReelWithArrows";
 import { useTitle } from "@/hooks/useTitle";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const FALLBACK_IMAGE = "/images/backup.png";
@@ -72,7 +72,7 @@ function WatchProvidersSection({
               className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-300"
             >
               {p.logo_path ? (
-                <Image
+                <SafeImage
                   src={`${IMAGE_BASE_PROVIDER}${p.logo_path}`}
                   alt={p.provider_name}
                   width={24}
@@ -165,7 +165,7 @@ export function MovieDetailPage({
               runtime: movie.runtime,
             }}
           />
-          <Image
+          <SafeImage
             src={image}
             alt={movie.title}
             width={384}
@@ -246,6 +246,7 @@ export function MovieDetailPage({
                     {i > 0 && ", "}
                     <Link
                       href={`/person/${d.id}`}
+                      prefetch={false}
                       className="text-blue-600 hover:underline dark:text-blue-400"
                     >
                       {d.name}
@@ -296,6 +297,7 @@ export function MovieDetailPage({
               </span>{" "}
               <Link
                 href={`/collection/${movie.belongs_to_collection.id}`}
+                prefetch={false}
                 className="text-blue-600 hover:underline dark:text-blue-400"
               >
                 {movie.belongs_to_collection.name}

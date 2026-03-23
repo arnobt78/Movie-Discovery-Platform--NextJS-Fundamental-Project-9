@@ -5,12 +5,12 @@
  * Uses shadcn Card, Badge, framer-motion for entrance animation.
  */
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { useGenres } from "@/components/providers/GenresProvider";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
@@ -59,7 +59,7 @@ export function MovieCard({ movie, index = 0 }: MovieCardProps) {
       className="w-full h-full"
     >
       <Card className="h-full max-w-sm overflow-hidden flex flex-col">
-        <Link href={`/movie/${id}`} className="flex-shrink-0 block relative">
+        <Link href={`/movie/${id}`} prefetch={false} className="flex-shrink-0 block relative">
           <div className="relative w-full aspect-[2/3] bg-gray-200 dark:bg-gray-700 overflow-hidden rounded-t-lg">
             <BookmarkButton
               movie={{
@@ -79,7 +79,7 @@ export function MovieCard({ movie, index = 0 }: MovieCardProps) {
               whileHover={{ scale: 1.08 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
             >
-              <Image
+              <SafeImage
                 src={image}
                 alt={original_title}
                 fill
@@ -113,7 +113,7 @@ export function MovieCard({ movie, index = 0 }: MovieCardProps) {
               </Badge>
             )}
           </div>
-          <Link href={`/movie/${id}`}>
+          <Link href={`/movie/${id}`} prefetch={false}>
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white hover:underline line-clamp-2">
               {original_title}
             </h5>

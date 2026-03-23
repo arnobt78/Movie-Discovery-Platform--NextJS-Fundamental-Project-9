@@ -2,7 +2,7 @@
  * Route: /movies/genre/[id] — paginated movies filtered by genre.
  */
 import { notFound } from "next/navigation";
-import { fetchDiscoverMoviesPage, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
+import { fetchDiscoverMoviesPage, fetchGenres } from "@/lib/tmdb";
 import { GenrePage } from "@/components/pages/GenrePage";
 
 interface GenreRouteProps {
@@ -33,7 +33,7 @@ export default async function GenreRoute({ params, searchParams }: GenreRoutePro
   const genre = genres.find((g) => g.id === genreId);
   if (!genre) notFound();
 
-  const movies = await enrichMoviesWithRuntime(data.results ?? []);
+  const movies = (data.results ?? []).slice(0, 8);
   const totalPages = Math.max(1, data.total_pages ?? 1);
 
   return (

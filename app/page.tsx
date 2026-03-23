@@ -1,12 +1,11 @@
 /**
  * Home page - Server component that fetches trending, now_playing, and top_rated
  * from TMDB, then enriches lists with runtime and renders section components.
- * Trending reel uses 30 movies (2 pages); hero uses 10.
+ * Trending reel uses 10 movies; hero uses 5.
  */
 import {
   fetchMovies,
   fetchTrendingMoviesPage,
-  enrichMoviesWithRuntime,
 } from "@/lib/tmdb";
 import {
   HeroSection,
@@ -16,20 +15,16 @@ import {
 } from "@/components/sections";
 
 export default async function HomePage() {
-  const [trendingPage1, trendingPage2, nowPlayingRaw, topRatedRaw] = await Promise.all([
+  const [trendingPage1, nowPlayingRaw, topRatedRaw] = await Promise.all([
     fetchTrendingMoviesPage("day", 1),
-    fetchTrendingMoviesPage("day", 2),
     fetchMovies("movie/now_playing"),
     fetchMovies("movie/top_rated"),
   ]);
-  const trendingRaw = [...(trendingPage1.results ?? []), ...(trendingPage2.results ?? [])].slice(0, 30);
+  const trendingRaw = (trendingPage1.results ?? []).slice(0, 10);
 
-  // Enrich with runtime by fetching movie details for first N items per list.
-  const [trending, nowPlaying, topRated] = await Promise.all([
-    enrichMoviesWithRuntime(trendingRaw),
-    enrichMoviesWithRuntime(nowPlayingRaw),
-    enrichMoviesWithRuntime(topRatedRaw),
-  ]);
+  const trending = trendingRaw;
+  const nowPlaying = nowPlayingRaw;
+  const topRated = topRatedRaw;
 
   const seen = new Set<number>();
   const heroMovies = [...nowPlaying, ...trending]
@@ -38,7 +33,7 @@ export default async function HomePage() {
       seen.add(m.id);
       return true;
     })
-    .slice(0, 10);
+    .slice(0, 5);
 
   const shuffle = <T,>(arr: T[]): T[] => {
     const a = [...arr];
@@ -49,9 +44,9 @@ export default async function HomePage() {
     return a;
   };
 
-  const topRatedShuffled = shuffle(topRated).slice(0, 20);
-  const trendingShuffled = shuffle(trending).slice(0, 30);
-  const nowPlayingShuffled = shuffle(nowPlaying).slice(0, 20);
+  const topRatedShuffled = shuffle(topRated).slice(0, 4);
+  const trendingShuffled = shuffle(trending).slice(0, 10);
+  const nowPlayingShuffled = shuffle(nowPlaying).slice(0, 4);
 
   return (
     <div className="w-full max-w-9xl mx-auto py-7">

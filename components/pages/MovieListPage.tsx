@@ -2,7 +2,7 @@
 
 /**
  * MovieListPage - grid of movies with optional URL-based pagination.
- * Responsive: ~20 cards per page (grid-cols-1 sm:2 lg:3 xl:4).
+ * Responsive card grid.
  */
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";
@@ -37,7 +37,7 @@ export function MovieListPage({
     return (
       <section className="max-w-9xl mx-auto py-7">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {Array.from({ length: 20 }).map((_, i) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <MovieCardSkeleton key={i} />
           ))}
         </div>
@@ -58,7 +58,7 @@ export function MovieListPage({
           hidden: {},
         }}
       >
-        {movies.map((movie, index) => (
+        {movies.slice(0, 8).map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}
       </motion.div>

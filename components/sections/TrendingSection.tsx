@@ -15,7 +15,7 @@ interface TrendingSectionProps {
 const REEL_DURATION = 55;
 
 export function TrendingSection({ movies }: TrendingSectionProps) {
-  const list = movies.slice(0, 30);
+  const list = movies.slice(0, 10);
   const duplicated = [...list, ...list];
 
   return (

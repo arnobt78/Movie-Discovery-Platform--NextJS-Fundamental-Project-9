@@ -4,9 +4,9 @@
  * CastCard - cast member photo, name, character; links to /person/[id].
  */
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import type { CastMember } from "@/types/movie";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 
@@ -27,9 +27,9 @@ export function CastCard({ cast, index = 0 }: CastCardProps) {
       transition={{ duration: 0.3, delay: index * 0.03 }}
       className="flex-shrink-0 w-24 sm:w-28"
     >
-      <Link href={`/person/${cast.id}`}>
+      <Link href={`/person/${cast.id}`} prefetch={false}>
         <div className="rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-[2/3] hover:ring-2 hover:ring-blue-500 transition-all">
-          <Image
+          <SafeImage
             src={image}
             alt={cast.name}
             width={112}

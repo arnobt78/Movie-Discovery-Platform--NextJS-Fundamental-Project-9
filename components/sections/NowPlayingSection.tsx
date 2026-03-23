@@ -40,7 +40,7 @@ export function NowPlayingSection({ movies }: NowPlayingSectionProps) {
           hidden: {},
         }}
       >
-        {movies.map((movie, index) => (
+        {movies.slice(0, 4).map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}
       </motion.div>

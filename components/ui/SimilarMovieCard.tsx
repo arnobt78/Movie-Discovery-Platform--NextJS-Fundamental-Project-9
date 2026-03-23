@@ -4,10 +4,10 @@
  * SimilarMovieCard - compact poster + title; used in horizontal lists (similar, recommendations, collection).
  */
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Movie } from "@/types/movie";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 const FALLBACK = "/images/backup.png";
@@ -29,7 +29,7 @@ export function SimilarMovieCard({ movie, index = 0 }: SimilarMovieCardProps) {
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className="flex-shrink-0 w-32 sm:w-36"
     >
-      <Link href={`/movie/${movie.id}`} className="relative block">
+      <Link href={`/movie/${movie.id}`} prefetch={false} className="relative block">
         <div className="rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-[2/3] hover:ring-2 hover:ring-blue-500 transition-all relative">
           <BookmarkButton
             movie={{
@@ -49,7 +49,7 @@ export function SimilarMovieCard({ movie, index = 0 }: SimilarMovieCardProps) {
             whileHover={{ scale: 1.08 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <Image
+            <SafeImage
               src={image}
               alt={movie.original_title}
               width={144}

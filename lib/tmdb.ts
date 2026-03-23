@@ -23,6 +23,14 @@ import type {
 
 const API_BASE = "https://api.themoviedb.org/3";
 
+const TMDB_REVALIDATE_SECONDS = 600;
+
+async function fetchTmdb(url: string): Promise<Response> {
+  return fetch(url, {
+    next: { revalidate: TMDB_REVALIDATE_SECONDS },
+  });
+}
+
 // Prefer server key; fallback to public for client-side usage.
 function getApiKey(): string {
   const key = process.env.TMDB_API_KEY ?? process.env.NEXT_PUBLIC_TMDB_API_KEY ?? "";
@@ -49,7 +57,7 @@ export async function fetchMoviesPage(
   const params = new URLSearchParams({ api_key: key, page: String(page) });
   if (query) params.set("query", query);
   const url = `${API_BASE}/${apiPath}?${params.toString()}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
   return {
@@ -64,7 +72,7 @@ export async function fetchMovieById(id: string): Promise<MovieDetail | null> {
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/movie/${id}?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   const json: MovieDetail = await res.json();
   return json;
@@ -74,7 +82,7 @@ export async function fetchMovieCredits(id: string): Promise<MovieCredits | null
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/movie/${id}/credits?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   return res.json();
 }
@@ -84,7 +92,7 @@ export async function fetchMovieVideos(id: string): Promise<Video[]> {
   const key = getApiKey();
   if (!key) return [];
   const url = `${API_BASE}/movie/${id}/videos?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return [];
   const json: MovieVideosResponse = await res.json();
   const trailers = (json.results ?? []).filter(
@@ -102,7 +110,7 @@ export async function fetchSimilarMoviesPage(id: string, page: number = 1): Prom
   const key = getApiKey();
   if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const url = `${API_BASE}/movie/${id}/similar?api_key=${key}&page=${page}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
   return { results: json.results ?? [], page: json.page ?? page, total_pages: json.total_pages ?? 0, total_results: json.total_results ?? 0 };
@@ -117,7 +125,7 @@ export async function fetchRecommendationsPage(id: string, page: number = 1): Pr
   const key = getApiKey();
   if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const url = `${API_BASE}/movie/${id}/recommendations?api_key=${key}&page=${page}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
   return { results: json.results ?? [], page: json.page ?? page, total_pages: json.total_pages ?? 0, total_results: json.total_results ?? 0 };
@@ -127,7 +135,7 @@ export async function fetchWatchProviders(id: string): Promise<WatchProvidersRes
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/movie/${id}/watch/providers?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   return res.json();
 }
@@ -136,7 +144,7 @@ export async function fetchReviews(id: string): Promise<ReviewsResponse | null> 
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/movie/${id}/reviews?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   return res.json();
 }
@@ -145,7 +153,7 @@ export async function fetchPersonById(id: string): Promise<Person | null> {
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/person/${id}?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   return res.json();
 }
@@ -156,7 +164,7 @@ export async function fetchPersonMovieCredits(
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/person/${id}/movie_credits?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   return res.json();
 }
@@ -165,7 +173,7 @@ export async function fetchCollectionById(id: string): Promise<Collection | null
   const key = getApiKey();
   if (!key) return null;
   const url = `${API_BASE}/collection/${id}?api_key=${key}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return null;
   return res.json();
 }
@@ -185,7 +193,7 @@ export async function fetchTrendingMoviesPage(
   const key = getApiKey();
   if (!key) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const url = `${API_BASE}/trending/movie/${timeWindow}?api_key=${key}&page=${page}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
   return {
@@ -216,7 +224,7 @@ export async function fetchDiscoverMoviesPage(
   if (params.sort_by) searchParams.set("sort_by", params.sort_by);
   searchParams.set("page", String(params.page ?? 1));
   const url = `${API_BASE}/discover/movie?${searchParams.toString()}`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const json: TmdbListResponse = await res.json();
   return {
@@ -231,7 +239,7 @@ export async function fetchGenres(): Promise<Genre[]> {
   const key = getApiKey();
   if (!key) return [];
   const url = `${API_BASE}/genre/movie/list?api_key=${key}&language=en`;
-  const res = await fetch(url);
+  const res = await fetchTmdb(url);
   if (!res.ok) return [];
   const json: GenreListResponse = await res.json();
   return json.genres ?? [];

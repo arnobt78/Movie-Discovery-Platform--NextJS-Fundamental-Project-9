@@ -4,7 +4,6 @@
  * PersonDetailPage - actor/director profile: photo, bio, acting/director/other credits.
  * Each credit links to /movie/[id]. Data from app/person/[id] route.
  */
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type {
@@ -15,6 +14,7 @@ import type {
 import { useTitle } from "@/hooks/useTitle";
 import { BookmarkButton } from "@/components/ui/BookmarkButton";
 import { ReelWithArrows } from "@/components/ui/ReelWithArrows";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const FALLBACK_IMAGE = "/images/backup.png";
@@ -48,7 +48,7 @@ export function PersonDetailPage({
           transition={{ duration: 0.3 }}
           className="max-w-sm flex-shrink-0"
         >
-          <Image
+          <SafeImage
             src={profileImage}
             alt={person.name}
             width={384}
@@ -196,7 +196,7 @@ function PersonMovieCard({
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className="flex-shrink-0 w-32 sm:w-36"
     >
-      <Link href={`/movie/${credit.id}`} className="relative block">
+      <Link href={`/movie/${credit.id}`} prefetch={false} className="relative block">
         <div className="rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 aspect-[2/3] hover:ring-2 hover:ring-blue-500 transition-all relative">
           <BookmarkButton
             movie={{
@@ -214,7 +214,7 @@ function PersonMovieCard({
             whileHover={{ scale: 1.08 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <Image
+            <SafeImage
               src={image}
               alt={title}
               width={144}

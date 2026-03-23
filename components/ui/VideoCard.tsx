@@ -4,10 +4,10 @@
  * VideoCard - YouTube thumbnail; click opens modal with embedded player (video.key).
  */
 import { useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import type { Video } from "@/types/movie";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const THUMB_URL = "https://img.youtube.com/vi";
 
@@ -29,7 +29,7 @@ export function VideoCard({ video, index = 0 }: VideoCardProps) {
         onClick={() => setShowModal(true)}
         className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        <Image
+        <SafeImage
           src={`${THUMB_URL}/${video.key}/mqdefault.jpg`}
           alt={video.name}
           fill

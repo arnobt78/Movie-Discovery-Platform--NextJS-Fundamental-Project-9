@@ -1,7 +1,7 @@
 /**
  * Route: /movies/discover — filter by genre, year, sort; paginated via URL page.
  */
-import { fetchDiscoverMoviesPage, fetchGenres, enrichMoviesWithRuntime } from "@/lib/tmdb";
+import { fetchDiscoverMoviesPage, fetchGenres } from "@/lib/tmdb";
 import { DiscoverPage } from "@/components/pages/DiscoverPage";
 
 interface DiscoverPageProps {
@@ -29,7 +29,7 @@ export default async function DiscoverRoute({ searchParams }: DiscoverPageProps)
     fetchGenres(),
   ]);
 
-  const movies = await enrichMoviesWithRuntime(data.results ?? []);
+  const movies = (data.results ?? []).slice(0, 8);
   const totalPages = Math.max(1, data.total_pages ?? 1);
 
   const preserveQuery = new URLSearchParams();

@@ -113,7 +113,7 @@ export function DiscoverPage({
         }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
-        {initialMovies.map((movie, index) => (
+        {initialMovies.slice(0, 8).map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}
       </motion.div>

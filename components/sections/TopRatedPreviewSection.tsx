@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * TopRatedPreviewSection - up to 20 top-rated movies (random order each load) + "See all" link.
+ * TopRatedPreviewSection - up to 4 top-rated movies (random order each load) + "See all" link.
  */
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -40,7 +40,7 @@ export function TopRatedPreviewSection({ movies }: TopRatedPreviewSectionProps) 
           hidden: {},
         }}
       >
-        {movies.slice(0, 20).map((movie, index) => (
+        {movies.slice(0, 4).map((movie, index) => (
           <MovieCard key={movie.id} movie={movie} index={index} />
         ))}
       </motion.div>
