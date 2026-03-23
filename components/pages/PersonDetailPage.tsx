@@ -118,11 +118,11 @@ export function PersonDetailPage({
             Acting
           </h2>
           <ReelWithArrows>
-            {[...cast, ...cast].map((credit, i) => (
+            {[...cast.slice(0, 10), ...cast.slice(0, 10)].map((credit, i) => (
               <PersonMovieCard
                 key={`acting-${credit.credit_id ?? credit.id}-${i}`}
                 credit={credit}
-                index={i % cast.length}
+                index={i % Math.min(cast.length, 10)}
               />
             ))}
           </ReelWithArrows>
@@ -140,11 +140,11 @@ export function PersonDetailPage({
             Director
           </h2>
           <ReelWithArrows>
-            {[...directors, ...directors].map((credit, i) => (
+            {[...directors.slice(0, 10), ...directors.slice(0, 10)].map((credit, i) => (
               <PersonMovieCard
                 key={`dir-${credit.credit_id ?? credit.id}-${i}`}
                 credit={credit}
-                index={i % directors.length}
+                index={i % Math.min(directors.length, 10)}
               />
             ))}
           </ReelWithArrows>
@@ -162,11 +162,11 @@ export function PersonDetailPage({
             Other Credits
           </h2>
           <ReelWithArrows>
-            {[...otherCrew, ...otherCrew].map((credit, i) => (
+            {[...otherCrew.slice(0, 10), ...otherCrew.slice(0, 10)].map((credit, i) => (
               <PersonMovieCard
                 key={`crew-${credit.credit_id ?? credit.id}-${credit.job}-${i}`}
                 credit={credit}
-                index={i % otherCrew.length}
+                index={i % Math.min(otherCrew.length, 10)}
               />
             ))}
           </ReelWithArrows>

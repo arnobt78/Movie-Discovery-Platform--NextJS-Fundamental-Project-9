@@ -141,7 +141,7 @@ export function MovieDetailPage({
 
   const directors =
     credits?.crew.filter((c) => c.job === "Director") ?? [];
-  const topCast = credits?.cast.slice(0, 12) ?? [];
+  const topCast = credits?.cast.slice(0, 10) ?? [];
 
   return (
     <section className="w-full py-5">
@@ -385,7 +385,7 @@ export function MovieDetailPage({
           </h2>
           <ReelWithArrows>
             {(() => {
-              const list = similarMovies.slice(0, 30);
+              const list = similarMovies.slice(0, 10);
               return [...list, ...list].map((m, i) => (
                 <SimilarMovieCard key={`similar-${m.id}-${i}`} movie={m} index={i % list.length} />
               ));
@@ -406,7 +406,7 @@ export function MovieDetailPage({
           </h2>
           <ReelWithArrows>
             {(() => {
-              const list = recommendations.slice(0, 30);
+              const list = recommendations.slice(0, 10);
               return [...list, ...list].map((m, i) => (
                 <SimilarMovieCard key={`rec-${m.id}-${i}`} movie={m} index={i % list.length} />
               ));
