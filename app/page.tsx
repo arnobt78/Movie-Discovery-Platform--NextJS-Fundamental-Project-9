@@ -35,25 +35,16 @@ export default async function HomePage() {
     })
     .slice(0, 5);
 
-  const shuffle = <T,>(arr: T[]): T[] => {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
-
-  const topRatedShuffled = shuffle(topRated).slice(0, 4);
-  const trendingShuffled = shuffle(trending).slice(0, 10);
-  const nowPlayingShuffled = shuffle(nowPlaying).slice(0, 4);
+  const topRatedList = topRated.slice(0, 4);
+  const trendingList = trending.slice(0, 10);
+  const nowPlayingList = nowPlaying.slice(0, 4);
 
   return (
     <div className="w-full max-w-9xl mx-auto py-7">
       {heroMovies.length > 0 && <HeroSection movies={heroMovies} />}
-      <TrendingSection movies={trendingShuffled} />
-      <NowPlayingSection movies={nowPlayingShuffled} />
-      <TopRatedPreviewSection movies={topRatedShuffled} />
+      <TrendingSection movies={trendingList} />
+      <NowPlayingSection movies={nowPlayingList} />
+      <TopRatedPreviewSection movies={topRatedList} />
     </div>
   );
 }
