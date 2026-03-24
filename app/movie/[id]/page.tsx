@@ -10,8 +10,6 @@ import {
   fetchMovieVideos,
   fetchSimilarMoviesPage,
   fetchRecommendationsPage,
-  fetchWatchProviders,
-  fetchReviews,
   fetchCollectionById,
 } from "@/lib/tmdb";
 import { MovieDetailPage } from "@/components/pages/MovieDetailPage";
@@ -45,28 +43,20 @@ export default async function MovieRoute({ params }: MoviePageProps) {
     credits,
     videos,
     similarPage1,
-    similarPage2,
     recPage1,
-    recPage2,
-    watchProviders,
-    reviews,
     collection,
   ] = await Promise.all([
     fetchMovieCredits(id),
     fetchMovieVideos(id),
     fetchSimilarMoviesPage(id, 1),
-    fetchSimilarMoviesPage(id, 2),
     fetchRecommendationsPage(id, 1),
-    fetchRecommendationsPage(id, 2),
-    fetchWatchProviders(id),
-    fetchReviews(id),
     movie.belongs_to_collection
       ? fetchCollectionById(String(movie.belongs_to_collection.id))
       : Promise.resolve(null),
   ]);
 
-  const similar = [...(similarPage1.results ?? []), ...(similarPage2.results ?? [])].slice(0, 30);
-  const recommendations = [...(recPage1.results ?? []), ...(recPage2.results ?? [])].slice(0, 30);
+  const similar = (similarPage1.results ?? []).slice(0, 20);
+  const recommendations = (recPage1.results ?? []).slice(0, 20);
 
   return (
     <MovieDetailPage
@@ -75,8 +65,8 @@ export default async function MovieRoute({ params }: MoviePageProps) {
       videos={videos}
       similarMovies={similar}
       recommendations={recommendations}
-      watchProviders={watchProviders}
-      reviews={reviews?.results ?? []}
+      watchProviders={null}
+      reviews={[]}
       collection={collection}
     />
   );

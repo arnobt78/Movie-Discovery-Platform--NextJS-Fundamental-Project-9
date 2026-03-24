@@ -1,3 +1,13 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Allow: /movies/trending
+Allow: /movies/popular
+Allow: /movies/top
+Allow: /movies/upcoming
+Allow: /movies/now-playing
+Allow: /movies/discover
+Allow: /bookmarks
+Allow: /search
+Disallow: /movie/
+Disallow: /person/
+Disallow: /collection/
