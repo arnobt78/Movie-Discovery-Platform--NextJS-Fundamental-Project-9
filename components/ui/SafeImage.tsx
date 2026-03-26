@@ -17,6 +17,10 @@ export function SafeImage({
 }: ImageProps) {
   const [useNative, setUseNative] = useState(false);
   const resolvedSrc = typeof src === "string" ? src : "";
+  const isRemoteSrc =
+    typeof src === "string" &&
+    (src.startsWith("https://") || src.startsWith("http://"));
+  const effectiveUnoptimized = rest.unoptimized ?? isRemoteSrc;
 
   const handleError = useCallback(
     (e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -68,6 +72,7 @@ export function SafeImage({
       height={height}
       priority={priority}
       loading={loading}
+      unoptimized={effectiveUnoptimized}
       onError={handleError}
     />
   );
